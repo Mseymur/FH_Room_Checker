@@ -1,0 +1,155 @@
+<!-- 
+  ROOM SCHEDULE PAGE TEMPLATE
+  
+  Displays a detailed timeline view for a specific room, showing all time slots
+  (FREE and BUSY) for the selected date.
+  
+  Data Binding:
+  - slots: RoomSlot[] - All time slots for the room (filtered and sorted)
+  - buildingCode: string - Building code from route
+  - roomId: string - Room ID from route
+  - selectedDate: string - Currently selected date (YYYY-MM-DD)
+  - nextEventText: string - Text showing next upcoming event
+-->
+
+<!-- Header: Back button, room info, date picker, navigation -->
+<ion-header class="ion-no-border">
+  <div class="schedule-header">
+    <div class="header-top">
+      <!-- Back button: Returns to building overview -->
+    <button class="back-btn" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
+      <!-- Room information: Room ID and building code -->
+    <div class="header-info">
+      <h1 class="room-title">{{ roomId }}</h1>
+      <p class="room-subtitle">Building {{ buildingCode }}</p>
+    </div>
+    </div>
+    
+    <!-- Date/Time controls: Date picker and quick navigation -->
+    <div class="date-time-controls">
+      <button class="date-time-picker-btn" (click)="openDatePicker()">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ getCurrentTimeLabel() }}</span>
+      </button>
+
+
+      
+      <div class="quick-nav">
+        <button (click)="previousDay()" class="nav-btn">
+          <ion-icon name="chevron-back"></ion-icon>
+        </button>
+        <button (click)="nextDay()" class="nav-btn">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="schedule-content">
+  <div class="content-wrapper">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="state-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading schedule...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loading && error" class="state-container">
+      <ion-icon name="alert-circle"></ion-icon>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="loadSchedule()">Retry</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && !error && slots.length === 0" class="state-container">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <p>No schedule data for this date.</p>
+    </div>
+
+    <!-- ========== TIMELINE VIEW ========== -->
+    <!-- Displays all time slots for the room in chronological order -->
+    <!-- Data: slots (RoomSlot[]) - filtered by room, truncated to 08:00-18:15, sorted chronologically -->
+    <div *ngIf="!loading && !error && slots.length > 0" class="timeline-wrapper">
+      <div class="timeline">
+        <!-- Each timeline row represents one time slot -->
+        <div *ngFor="let slot of slots" 
+            class="timeline-row" 
+            [class.free]="slot.status === 'FREE'" 
+            [class.busy]="slot.status === 'BUSY'" 
+            [class.current]="isCurrentSlot(slot)"
+            [class.past]="isPastSlot(slot)">
+          <!-- Time column: Start and end times -->
+          <div class="time-column">
+            <span class="time-start">{{ formatTime(slot.start) }}</span>
+            <!-- getSlotEndTime() shows 18:15 if slot extendsPast1815, otherwise slot.end -->
+            <span class="time-end">{{ getSlotEndTime(slot) }}</span>
+          </div>
+          <!-- Slot card: Status, details, and "Now" indicator -->
+          <div class="slot-card">
+            <!-- Status badge: Only for FREE slots in this design -->
+            <div class="slot-status" *ngIf="slot.status === 'FREE'">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              <span>Available</span>
+            </div>
+
+            <!-- Slot details: For BUSY slots, the title is the heading -->
+            <div class="slot-details" [class.is-busy]="slot.status === 'BUSY'">
+              <!-- FREE slots: (Content removed by user previously) -->
+              <ng-container *ngIf="slot.status === 'FREE'">
+              </ng-container>
+
+              <!-- BUSY slots: Show class title and teacher -->
+              <div *ngIf="slot.status === 'BUSY'" class="busy-info">
+                <div class="class-title">{{ slot.title || 'Scheduled' }}</div>
+                <div class="class-teacher" *ngIf="slot.teacher">{{ slot.teacher }}</div>
+              </div>
+            </div>
+            <!-- "Now" indicator: Shows if this slot is currently active (only on today) -->
+            <!-- Method: isCurrentSlot(slot) checks if current time is within slot.start and slot.end -->
+            <div class="slot-meta" *ngIf="isCurrentSlot(slot)">
+              <span class="now-chip">Now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-event" *ngIf="nextEventText && !isAfterHours()">
+        <ion-icon name="time-outline"></ion-icon>
+        <span>{{ nextEventText }}</span>
+      </div>
+      
+      <!-- After Hours Notice -->
+      <div *ngIf="isAfterHours() && isToday" class="after-hours-text">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>Building hours: 08:00 - 18:15</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-modal [keepContentsMounted]="true" #datetimeModal class="datetime-modal ion-palette-light">
+  <ng-template>
+    <ion-datetime
+      #datetime
+      id="datetime"
+      presentation="date"
+      [(ngModel)]="tempDateISO"
+      (ionChange)="onDateTimeChange($event)"
+    >
+      <div slot="buttons" class="picker-footer">
+          <ion-button color="medium" fill="clear" (click)="datetimeModal.dismiss()" class="cancel-btn">
+              Cancel
+          </ion-button>
+          <ion-button color="primary" fill="clear" (click)="resetToNow()" class="reset-now-btn">
+            Today
+          </ion-button>
+          <ion-button color="primary" fill="solid" (click)="applyDateChange(); datetimeModal.dismiss()" class="apply-btn">
+              Apply
+          </ion-button>
+      </div>
+    </ion-datetime>
+  </ng-template>
+</ion-modal>
