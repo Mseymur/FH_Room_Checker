@@ -6,9 +6,16 @@ This guide explains how to deploy the FH Room Checker frontend to Vercel.
 
 ### Option 1: Vercel CLI
 ```bash
-cd frontend
+# Install Vercel CLI globally (optional if using npx)
 npm install -g vercel
+
+# Deploy
 vercel
+```
+
+Or using npx (no installation needed):
+```bash
+npx vercel
 ```
 
 ### Option 2: Vercel Dashboard

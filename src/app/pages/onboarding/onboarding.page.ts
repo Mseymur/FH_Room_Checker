@@ -20,8 +20,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, IonContent, IonIcon, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { informationCircleOutline } from 'ionicons/icons';
 // Service import: BuildingService provides building list and API methods
 import { BuildingService } from 'src/app/services/building';
 
@@ -30,7 +32,7 @@ import { BuildingService } from 'src/app/services/building';
   templateUrl: './onboarding.page.html',
   styleUrls: ['./onboarding.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, IonContent, IonIcon, IonSelect, IonSelectOption]
 })
 export class OnboardingPage {
   // ========== BUILDING SELECTION ==========
@@ -49,7 +51,9 @@ export class OnboardingPage {
     private router: Router,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
-  ) {}
+  ) {
+    addIcons({ informationCircleOutline });
+  }
 
   /**
    * Initialize building and navigate to overview
@@ -94,7 +98,7 @@ export class OnboardingPage {
 
       // Small delay for UX
       setTimeout(() => {
-      this.router.navigate(['/building-overview']);
+        this.router.navigate(['/building-overview']);
       }, 500);
 
     } catch (error: any) {
