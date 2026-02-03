@@ -19,11 +19,12 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RefresherEventDetail, ModalController, ToastController, PopoverController } from '@ionic/angular';
+import { RefresherEventDetail } from '@ionic/angular';
 import {
   IonHeader, IonContent, IonRefresher, IonRefresherContent,
   IonSpinner, IonIcon, IonButton, IonSearchbar,
-  IonSelect, IonSelectOption, IonModal, IonDatetime
+  IonSelect, IonSelectOption, IonModal, IonDatetime,
+  ModalController, ToastController, PopoverController
 } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
 import { RouterModule, Router } from '@angular/router';
