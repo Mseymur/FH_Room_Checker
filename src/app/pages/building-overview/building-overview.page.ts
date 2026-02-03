@@ -19,11 +19,22 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, RefresherEventDetail, ModalController, ToastController, PopoverController } from '@ionic/angular';
+import { RefresherEventDetail, ModalController, ToastController, PopoverController } from '@ionic/angular';
+import {
+  IonHeader, IonContent, IonRefresher, IonRefresherContent,
+  IonSpinner, IonIcon, IonButton, IonSearchbar,
+  IonSelect, IonSelectOption, IonModal, IonDatetime
+} from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
 import { RouterModule, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import {
+  calendarClearOutline, searchOutline, alertCircle,
+  checkmarkCircle, chevronForward, informationCircleOutline,
+  timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline
+} from 'ionicons/icons';
 
 /**
  * Room Data Model
@@ -60,7 +71,12 @@ interface Room {
   templateUrl: './building-overview.page.html',
   styleUrls: ['./building-overview.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule, FormsModule]
+  imports: [
+    CommonModule, RouterModule, FormsModule,
+    IonHeader, IonContent, IonRefresher, IonRefresherContent,
+    IonSpinner, IonIcon, IonButton, IonSearchbar,
+    IonSelect, IonSelectOption, IonModal, IonDatetime
+  ]
 })
 export class BuildingOverviewPage implements OnInit {
   buildingName: string = ''; // Current building code (e.g., 'AP152')
@@ -125,7 +141,13 @@ export class BuildingOverviewPage implements OnInit {
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) {
+    addIcons({
+      calendarClearOutline, searchOutline, alertCircle,
+      checkmarkCircle, chevronForward, informationCircleOutline,
+      timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline
+    });
+  }
 
   /**
    * Helper to get local ISO string (YYYY-MM-DDTHH:mm:ss)
