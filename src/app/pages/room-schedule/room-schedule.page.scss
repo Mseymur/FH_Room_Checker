@@ -1,7 +1,7 @@
 .schedule-header {
   background: linear-gradient(135deg, #D6001C 0%, #B00017 100%);
   padding: 1rem;
-  padding-top: 2.5rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
   color: white;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@
   flex-shrink: 0;
   transition: all 0.2s;
   padding: 0;
-  
+
   &:hover {
     opacity: 0.7;
   }
@@ -41,13 +41,13 @@
   flex: 1;
   text-align: left;
   min-width: 0;
-  
+
   .room-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
   }
-  
+
   .room-subtitle {
     font-size: 0.85rem;
     margin: 0.25rem 0 0;
@@ -77,20 +77,20 @@
   gap: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.3);
   }
-  
+
   ion-icon {
     font-size: 1rem;
-    
+
     &:last-child {
       margin-left: auto;
       font-size: 0.875rem;
     }
   }
-  
+
   span {
     flex: 1;
     text-align: left;
@@ -108,7 +108,7 @@ ion-datetime {
   border-radius: 12px;
   color-scheme: light !important;
   background: #ffffff !important;
-  
+
   /* Hide internal dividers */
   &::part(calendar-separator) {
     display: none !important;
@@ -138,7 +138,7 @@ ion-modal.datetime-modal {
   --ion-background-color: #ffffff !important;
   --ion-text-color: #000000 !important;
   --ion-item-background: #ffffff !important;
-  
+
   /* Standard centering for Ionic modals */
   position: fixed;
   top: 0;
@@ -146,7 +146,7 @@ ion-modal.datetime-modal {
   left: 0;
   right: 0;
   margin: auto;
-  
+
   &::part(content) {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
@@ -155,11 +155,12 @@ ion-modal.datetime-modal {
     overflow: hidden;
     border: none !important;
   }
-  
+
   /* Forcefully hide any internal ion-datetime borders */
   ion-datetime {
     --border-color: transparent !important;
     border: none !important;
+
     &::part(calendar-separator) {
       display: none !important;
     }
@@ -188,18 +189,18 @@ ion-modal.datetime-modal {
     height: 40px;
     margin: 4px;
     --background: transparent;
-    
+
     &.cancel-btn {
       --color: #000000 !important;
       opacity: 1 !important;
     }
-    
+
     &.reset-now-btn {
       --color: var(--fh-primary) !important;
       font-weight: 500;
       --background: transparent;
     }
-    
+
     &.apply-btn {
       --background: var(--fh-primary) !important;
       --background-activated: var(--fh-primary-dark) !important;
@@ -215,7 +216,7 @@ ion-modal.datetime-modal {
 .quick-nav {
   display: flex;
   gap: 12px;
-  
+
   .nav-btn {
     width: 48px;
     height: 48px;
@@ -228,11 +229,11 @@ ion-modal.datetime-modal {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.35);
     }
-    
+
     ion-icon {
       font-size: 1.125rem;
     }
@@ -258,12 +259,12 @@ ion-modal.datetime-modal {
   color: #6C757D;
   border: 1px solid #E9ECEF;
   margin-top: 1.5rem;
-  
+
   ion-icon {
     font-size: 2rem;
     color: #ADB5BD;
   }
-  
+
   .retry-btn {
     background: #D6001C;
     color: white;
@@ -283,9 +284,10 @@ ion-modal.datetime-modal {
 .timeline-row {
   display: flex;
   gap: 0.75rem;
-  align-items: center; /* Center time column and card vertically */
+  align-items: center;
+  /* Center time column and card vertically */
   position: relative;
-  
+
   &.past {
     opacity: 0.5;
   }
@@ -308,7 +310,8 @@ ion-modal.datetime-modal {
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content within card */
+  justify-content: center;
+  /* Center content within card */
   gap: 0.25rem;
   position: relative;
   min-height: 64px;
@@ -334,12 +337,12 @@ ion-modal.datetime-modal {
   align-items: center;
   gap: 0.35rem;
   color: #212529;
-  
+
   .timeline-row.free & {
     color: #28A745;
     font-weight: 700;
     font-size: 1.25rem;
-    
+
     ion-icon {
       color: #28A745;
       font-size: 1.5rem;
@@ -349,7 +352,7 @@ ion-modal.datetime-modal {
 
 .slot-details {
   font-size: 0.85rem;
-  
+
   .class-title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -357,7 +360,7 @@ ion-modal.datetime-modal {
     line-height: 1.2;
     margin-bottom: 0.25rem;
   }
-  
+
   .class-teacher {
     font-size: 1.05rem;
     color: #555;

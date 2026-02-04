@@ -7,7 +7,10 @@
 .onboarding-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  padding-left: calc(1rem + env(safe-area-inset-left));
+  padding-right: calc(1rem + env(safe-area-inset-right));
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -216,7 +219,7 @@
     .feature-content {
       flex: 1;
 
-      .title-wrapper{
+      .title-wrapper {
         flex-direction: row !important;
       }
 
@@ -318,7 +321,10 @@
 // Responsive
 @media (max-width: 480px) {
   .onboarding-container {
-    padding: 0.75rem 1rem 1.25rem;
+    padding-top: calc(0.75rem + env(safe-area-inset-top));
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+    padding-left: calc(1rem + env(safe-area-inset-left));
+    padding-right: calc(1rem + env(safe-area-inset-right));
   }
 
   .hero-section {
