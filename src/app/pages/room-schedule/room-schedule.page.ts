@@ -18,9 +18,9 @@
  * 5. Displays slots in chronological order
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavController, IonHeader, IonContent, IonIcon, IonSpinner, IonModal, IonDatetime, IonButton } from '@ionic/angular/standalone';
+import { NavController, IonHeader, IonContent, IonIcon, IonSpinner, IonModal, IonDatetime, IonButton, Platform } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BuildingService } from 'src/app/services/building';
@@ -55,7 +55,7 @@ interface RoomSlot {
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, IonHeader, IonContent, IonIcon, IonSpinner, IonModal, IonDatetime, IonButton]
 })
-export class RoomSchedulePage implements OnInit {
+export class RoomSchedulePage implements OnInit, OnDestroy {
   @ViewChild('datetimeModal') datetimeModal!: IonModal;
 
   // ========== ROUTE PARAMETERS ==========
@@ -84,11 +84,16 @@ export class RoomSchedulePage implements OnInit {
   error = ''; // Error message
   nextEventText = ''; // Text showing next upcoming event (e.g., "Free in 15 min")
 
+  // Track when the app was paused to calculate time away
+  private lastPauseTime: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private navCtrl: NavController,
-    private buildingService: BuildingService
+    private buildingService: BuildingService,
+    private cdr: ChangeDetectorRef,
+    private platform: Platform
   ) {
     addIcons({ arrowBack, calendarOutline, chevronBack, chevronForward, alertCircle, checkmarkCircle, timeOutline, informationCircleOutline });
   }
@@ -117,6 +122,25 @@ export class RoomSchedulePage implements OnInit {
         this.loadSchedule();
       });
     });
+
+    // Track when app goes to background
+    this.platform.pause.subscribe(() => {
+      this.lastPauseTime = Date.now();
+    });
+
+    // Auto-update time when app resumes from background
+    this.platform.resume.subscribe(() => {
+      const timeAway = Date.now() - this.lastPauseTime;
+
+      // If away for more than 10 seconds, force reset to "Now" mode
+      if (timeAway > 10000) {
+        this.resetToNow();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // No cleanup needed currently
   }
 
   /**
@@ -191,13 +215,13 @@ export class RoomSchedulePage implements OnInit {
     } catch (e: any) {
       console.error('Error loading schedule:', e);
       this.error = e?.message || 'Unable to load schedule.';
-      
+
       // Redirect to onboarding on errors
       if (e instanceof Error && e.message.includes('404')) {
         await this.router.navigate(['/home']);
         return;
       }
-      
+
       // Also check for HTTP errors
       if (e?.status && e.status >= 400) {
         await this.router.navigate(['/home']);
@@ -238,8 +262,16 @@ export class RoomSchedulePage implements OnInit {
       if (typeof this.tempDateISO === 'string') {
         // Extract the date part and reload
         this.selectedDate = this.tempDateISO.split('T')[0];
-        this.loadSchedule();
+        // We don't reload schedule here to avoid refreshing while user is still scrolling
+        // The Apply button will trigger the reload via applyDateChange()
       }
+    }
+  }
+
+  applyDateChange() {
+    if (this.tempDateISO) {
+      this.selectedDate = this.tempDateISO.split('T')[0];
+      this.loadSchedule();
     }
   }
 
@@ -262,6 +294,10 @@ export class RoomSchedulePage implements OnInit {
 
     this.selectedDate = today;
     this.tempDateISO = now.toISOString();
+
+    // Force change detection
+    this.cdr.detectChanges();
+
     this.loadSchedule();
   }
 

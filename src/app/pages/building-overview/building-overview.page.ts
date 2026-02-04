@@ -24,7 +24,7 @@ import {
   IonHeader, IonContent, IonRefresher, IonRefresherContent,
   IonSpinner, IonIcon, IonButton, IonSearchbar,
   IonSelect, IonSelectOption, IonModal, IonDatetime,
-  ModalController, ToastController, PopoverController, Platform
+  ModalController, ToastController, Platform
 } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
 import { RouterModule, Router } from '@angular/router';
@@ -133,6 +133,9 @@ export class BuildingOverviewPage implements OnInit {
   // ID for the live update timer
   private liveTimerId?: number;
 
+  // Track when the app was paused to calculate time away
+  private lastPauseTime: number = 0;
+
 
   // ========== STATISTICS ==========
   // Displayed in the header stats row
@@ -172,9 +175,20 @@ export class BuildingOverviewPage implements OnInit {
     this.selectedBuilding = this.buildingService.getSelectedBuilding();
     this.buildingName = this.selectedBuilding;
 
+    // Track when app goes to background
+    this.platform.pause.subscribe(() => {
+      this.lastPauseTime = Date.now();
+    });
+
     // Auto-update time when app resumes from background
     this.platform.resume.subscribe(() => {
-      if (this.isAutoTime) {
+      const timeAway = Date.now() - this.lastPauseTime;
+
+      // If away for more than 10 seconds, force reset to "Now" mode
+      if (timeAway > 10000) {
+        this.resetToNow();
+      } else if (this.isAutoTime) {
+        // If less than 10s but we were in auto mode, just refresh the time
         this.updateToNow();
       }
     });
