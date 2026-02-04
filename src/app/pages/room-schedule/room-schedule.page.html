@@ -131,13 +131,14 @@
     <ion-datetime #datetime id="datetime" presentation="date" [(ngModel)]="tempDateISO"
       (ionChange)="onDateTimeChange($event)" hour-cycle="h23" locale="de-AT">
       <div slot="buttons" class="picker-footer">
-        <ion-button color="medium" fill="clear" (click)="datetimeModal.dismiss()" class="cancel-btn">
+        <ion-button color="medium" fill="clear" (click)="datetime.cancel(); datetimeModal.dismiss()" class="cancel-btn">
           Cancel
         </ion-button>
         <ion-button color="primary" fill="clear" (click)="resetToNow()" class="reset-now-btn">
           Today
         </ion-button>
-        <ion-button color="primary" fill="solid" (click)="applyDateChange(); datetimeModal.dismiss()" class="apply-btn">
+        <ion-button color="primary" fill="solid"
+          (click)="datetime.confirm(); applyDateChange(); datetimeModal.dismiss()" class="apply-btn">
           Apply
         </ion-button>
       </div>

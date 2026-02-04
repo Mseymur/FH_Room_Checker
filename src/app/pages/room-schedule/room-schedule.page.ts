@@ -65,7 +65,7 @@ export class RoomSchedulePage implements OnInit {
   // ========== DATE/TIME SELECTION ==========
   // ========== DATE/TIME SELECTION ==========
   selectedDate: string = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  tempDateISO: string = ''; // Temporary value for the picker before applying
+  tempDateISO: string = new Date().toISOString(); // Temporary value for the picker (Full ISO)
 
   // Property for the ion-datetime model
   get selectedDateISO(): string {
@@ -214,35 +214,36 @@ export class RoomSchedulePage implements OnInit {
   }
 
   onDateTimeChange(event: any) {
-    const value = event.detail.value;
-    console.log('Date picker changed:', value);
-    if (value) {
-      // ion-datetime in 'date' presentation returns YYYY-MM-DD or ISO string
-      // We store it directly
-      this.tempDateISO = Array.isArray(value) ? value[0] : value;
-    }
-  }
-
-  applyDateChange() {
-    console.log('Applying date change:', this.tempDateISO);
-    if (this.tempDateISO) {
-      // Extract just the date part (YYYY-MM-DD)
-      this.selectedDate = this.tempDateISO.split('T')[0];
-      this.loadSchedule();
+    if (event.detail.value) {
+      // Update tempDateISO with the new value
+      this.tempDateISO = event.detail.value;
+      if (typeof this.tempDateISO === 'string') {
+        // Extract the date part and reload
+        this.selectedDate = this.tempDateISO.split('T')[0];
+        this.loadSchedule();
+      }
     }
   }
 
   openDatePicker() {
-    // Initialize picker with current selected date (YYYY-MM-DD)
-    // This matches the format expected by presentation="date"
-    this.tempDateISO = this.selectedDate;
+    // Initialize with full ISO string to avoid state issues
+    // Using current time ensures we have a valid ISO string
+    const now = new Date();
+    // If selectedDate is already set, construct ISO from it
+    if (this.selectedDate) {
+      this.tempDateISO = `${this.selectedDate}T${now.toISOString().split('T')[1]}`;
+    } else {
+      this.tempDateISO = now.toISOString();
+    }
     this.datetimeModal.present();
   }
 
   resetToNow() {
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+
     this.selectedDate = today;
-    this.tempDateISO = today;
+    this.tempDateISO = now.toISOString();
     this.loadSchedule();
   }
 
