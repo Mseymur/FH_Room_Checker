@@ -24,7 +24,7 @@ import {
   IonHeader, IonContent, IonRefresher, IonRefresherContent,
   IonSpinner, IonIcon, IonButton, IonSearchbar,
   IonSelect, IonSelectOption, IonModal, IonDatetime,
-  ModalController, ToastController, PopoverController
+  ModalController, ToastController, PopoverController, Platform
 } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
 import { RouterModule, Router } from '@angular/router';
@@ -126,6 +126,9 @@ export class BuildingOverviewPage implements OnInit {
   // Time picker configuration
   minuteValues: number[] = [0, 10, 20, 30, 40, 50]; // 10-minute increments
 
+  // Flag to track if we are in "Live/Now" mode
+  // If true, the app will auto-update to current time on resume/entry
+  isAutoTime: boolean = true;
 
 
   // ========== STATISTICS ==========
@@ -141,7 +144,8 @@ export class BuildingOverviewPage implements OnInit {
     public buildingService: BuildingService,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private platform: Platform
   ) {
     addIcons({
       calendarClearOutline, searchOutline, alertCircle,
@@ -165,6 +169,13 @@ export class BuildingOverviewPage implements OnInit {
     this.selectedBuilding = this.buildingService.getSelectedBuilding();
     this.buildingName = this.selectedBuilding;
 
+    // Auto-update time when app resumes from background
+    this.platform.resume.subscribe(() => {
+      if (this.isAutoTime) {
+        this.updateToNow();
+      }
+    });
+
     if (!this.buildingName) {
       this.error = 'No building selected. Please go back and select a building.';
       this.loading = false;
@@ -179,6 +190,21 @@ export class BuildingOverviewPage implements OnInit {
       this.selectedBuilding = serviceBuilding;
       this.onBuildingChange();
     }
+
+    // Update time if we are in auto mode
+    if (this.isAutoTime) {
+      this.updateToNow();
+    }
+  }
+
+  /**
+   * Updates the selected date/time to "Now" and reloads data
+   */
+  private updateToNow() {
+    this.selectedDateTimeISO = this.getNowISO();
+    this.selectedDate = this.selectedDateTimeISO.split('T')[0];
+    this.selectedTime = this.selectedDateTimeISO.split('T')[1].substring(0, 5);
+    this.loadData();
   }
 
   onBuildingChange() {
@@ -566,6 +592,9 @@ export class BuildingOverviewPage implements OnInit {
     if (event.detail.value) {
       this.selectedDateTimeISO = event.detail.value;
       if (typeof this.selectedDateTimeISO === 'string') {
+        // User manually selected a time, disable auto-update
+        this.isAutoTime = false;
+
         this.selectedDate = this.selectedDateTimeISO.split('T')[0];
         this.selectedTime = this.selectedDateTimeISO.split('T')[1].substring(0, 5);
         this.loadData();
@@ -574,9 +603,9 @@ export class BuildingOverviewPage implements OnInit {
   }
 
   resetToNow() {
-    this.selectedDateTimeISO = this.getNowISO();
-    // We update the local model immediately so the picker reflects "Now".
-    // The user must still click "Apply" to confirm this selection.
+    // Re-enable auto-update mode
+    this.isAutoTime = true;
+    this.updateToNow();
   }
 
   getFormattedDateTime(): string {
