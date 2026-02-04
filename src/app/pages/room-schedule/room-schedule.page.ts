@@ -182,7 +182,12 @@ export class RoomSchedulePage implements OnInit {
         })
         .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()); // Chronological order
 
-      this.updateNextEventText();
+      // Only update "next event" text if viewing today
+      if (this.isToday) {
+        this.updateNextEventText();
+      } else {
+        this.nextEventText = '';
+      }
     } catch (e: any) {
       this.error = e?.message || 'Unable to load schedule.';
     } finally {
