@@ -310,6 +310,11 @@ export class BuildingOverviewPage implements OnInit {
       console.error('Error loading data:', e);
       if (e instanceof HttpErrorResponse) {
         this.error = `Server Error: ${e.status} - ${e.statusText}`;
+        // Redirect to onboarding on server errors (4xx, 5xx)
+        if (e.status >= 400) {
+          await this.router.navigate(['/home']);
+          return;
+        }
       } else {
         this.error = 'Connection failed. Please check your internet connection.';
       }

@@ -189,7 +189,20 @@ export class RoomSchedulePage implements OnInit {
         this.nextEventText = '';
       }
     } catch (e: any) {
+      console.error('Error loading schedule:', e);
       this.error = e?.message || 'Unable to load schedule.';
+      
+      // Redirect to onboarding on errors
+      if (e instanceof Error && e.message.includes('404')) {
+        await this.router.navigate(['/home']);
+        return;
+      }
+      
+      // Also check for HTTP errors
+      if (e?.status && e.status >= 400) {
+        await this.router.navigate(['/home']);
+        return;
+      }
     } finally {
       this.loading = false;
     }
