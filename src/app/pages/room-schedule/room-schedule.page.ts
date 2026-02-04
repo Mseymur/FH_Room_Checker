@@ -215,20 +215,27 @@ export class RoomSchedulePage implements OnInit {
 
   onDateTimeChange(event: any) {
     const value = event.detail.value;
+    console.log('Date picker changed:', value);
     if (value) {
+      // ion-datetime in 'date' presentation returns YYYY-MM-DD or ISO string
+      // We store it directly
       this.tempDateISO = Array.isArray(value) ? value[0] : value;
     }
   }
 
   applyDateChange() {
+    console.log('Applying date change:', this.tempDateISO);
     if (this.tempDateISO) {
+      // Extract just the date part (YYYY-MM-DD)
       this.selectedDate = this.tempDateISO.split('T')[0];
+      this.loadSchedule();
     }
-    this.loadSchedule();
   }
 
   openDatePicker() {
-    this.tempDateISO = this.selectedDateISO;
+    // Initialize picker with current selected date (YYYY-MM-DD)
+    // This matches the format expected by presentation="date"
+    this.tempDateISO = this.selectedDate;
     this.datetimeModal.present();
   }
 

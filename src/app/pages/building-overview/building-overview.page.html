@@ -21,16 +21,9 @@
     <div class="header-top">
       <div class="header-center">
         <!-- Building switcher: Shows current building -->
-        <ion-select
-          [(ngModel)]="selectedBuilding"
-          (ionChange)="onBuildingChange()"
-          placeholder="Select building..."
-          [selectedText]="selectedBuilding"
-          class="building-select building-switcher"
-          [class.has-selection]="selectedBuilding"
-          interface="action-sheet"
-          justify="space-between"
-        >
+        <ion-select [(ngModel)]="selectedBuilding" (ionChange)="onBuildingChange()" placeholder="Select building..."
+          [selectedText]="selectedBuilding" class="building-select building-switcher"
+          [class.has-selection]="selectedBuilding" interface="action-sheet" justify="space-between">
           <ion-select-option *ngFor="let b of buildings" [value]="b.code">
             {{ b.code }} - {{ b.label }}
           </ion-select-option>
@@ -42,26 +35,24 @@
             <span>{{ getFormattedDateTime() }}</span>
           </div>
 
-          <ion-modal [keepContentsMounted]="true" trigger="open-date-modal" #datetimeModal class="datetime-modal ion-palette-light">
+          <ion-modal [keepContentsMounted]="true" trigger="open-date-modal" #datetimeModal
+            class="datetime-modal ion-palette-light">
             <ng-template>
-              <ion-datetime
-                #datetime
-                id="datetime"
-                presentation="date-time"
-                [minuteValues]="minuteValues"
-                [(ngModel)]="selectedDateTimeISO"
-                (ionChange)="onDateTimeChange($event)"
-              >
+              <ion-datetime #datetime id="datetime" presentation="date-time" [minuteValues]="minuteValues"
+                [(ngModel)]="selectedDateTimeISO" (ionChange)="onDateTimeChange($event)" hour-cycle="h23"
+                locale="de-AT">
                 <div slot="buttons" class="picker-footer">
-                    <ion-button color="medium" fill="clear" (click)="datetime.cancel(); datetimeModal.dismiss()" class="cancel-btn">
-                        Cancel
-                    </ion-button>
-                    <ion-button color="primary" fill="clear" (click)="resetToNow()" class="reset-now-btn">
-                        Now
-                    </ion-button>
-                    <ion-button color="primary" fill="solid" (click)="datetime.confirm(); datetimeModal.dismiss()" class="apply-btn">
-                        Apply
-                    </ion-button>
+                  <ion-button color="medium" fill="clear" (click)="datetime.cancel(); datetimeModal.dismiss()"
+                    class="cancel-btn">
+                    Cancel
+                  </ion-button>
+                  <ion-button color="primary" fill="clear" (click)="resetToNow()" class="reset-now-btn">
+                    Now
+                  </ion-button>
+                  <ion-button color="primary" fill="solid" (click)="datetime.confirm(); datetimeModal.dismiss()"
+                    class="apply-btn">
+                    Apply
+                  </ion-button>
                 </div>
               </ion-datetime>
             </ng-template>
@@ -74,13 +65,8 @@
     <!-- Data: searchQuery (string) -->
     <!-- Action: onSearchChange() triggers applyFilters() -->
     <div class="search-wrapper">
-      <ion-searchbar
-        [(ngModel)]="searchQuery"
-        (ionInput)="onSearchChange()"
-        placeholder="Search rooms..."
-        debounce="300"
-        class="main-searchbar"
-      ></ion-searchbar>
+      <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="onSearchChange()" placeholder="Search rooms..."
+        debounce="300" class="main-searchbar"></ion-searchbar>
     </div>
 
     <!-- Floor Filter: Filter rooms by floor -->
@@ -89,12 +75,8 @@
     <!-- Action: onFloorChange() triggers applyFilters() -->
     <div class="floor-filter-wrapper">
       <div class="floor-chips">
-        <button
-          *ngFor="let floor of floorOptions"
-          (click)="selectedFloor = floor; onFloorChange()"
-          [class.active]="selectedFloor === floor"
-          class="floor-btn"
-        >
+        <button *ngFor="let floor of floorOptions" (click)="selectedFloor = floor; onFloorChange()"
+          [class.active]="selectedFloor === floor" class="floor-btn">
           {{ floor === 'all' ? 'All Floors' : getFloorLabel(floor) }}
         </button>
       </div>
@@ -111,30 +93,30 @@
 
     <!-- Loading State -->
     @if (loading && allRooms.length === 0) {
-      <div class="state-container">
-        <ion-spinner name="crescent"></ion-spinner>
-        <p class="state-text">Loading rooms...</p>
-      </div>
+    <div class="state-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p class="state-text">Loading rooms...</p>
+    </div>
     }
 
     <!-- Error State -->
     @if (error && !loading){
-      <div class="state-container error-state">
-        <ion-icon name="alert-circle" class="state-icon"></ion-icon>
-        <h3 class="state-title">Unable to Load Rooms</h3>
-        <p class="state-text">{{ error }}</p>
-        <button (click)="loadData()" class="action-btn">Tap to Retry</button>
-      </div>
-        }
+    <div class="state-container error-state">
+      <ion-icon name="alert-circle" class="state-icon"></ion-icon>
+      <h3 class="state-title">Unable to Load Rooms</h3>
+      <p class="state-text">{{ error }}</p>
+      <button (click)="loadData()" class="action-btn">Tap to Retry</button>
+    </div>
+    }
 
-      <!-- Empty Search State -->
+    <!-- Empty Search State -->
     @if( freeRooms.length === 0 && !loading && !error){
-      <div class="state-container error-state">
-        <ion-icon name="search-outline" class="state-icon"></ion-icon>
-        <h3 class="state-title">No Rooms Match Your Filters</h3>
-        <p class="state-text">Try adjusting your search or floor filter</p>
-        <button (click)="clearFilters()" class="action-btn">Clear Filters</button>
-      </div>
+    <div class="state-container error-state">
+      <ion-icon name="search-outline" class="state-icon"></ion-icon>
+      <h3 class="state-title">No Rooms Match Your Filters</h3>
+      <p class="state-text">Try adjusting your search or floor filter</p>
+      <button (click)="clearFilters()" class="action-btn">Clear Filters</button>
+    </div>
     }
 
     <!-- ========== AVAILABLE NOW SECTION ========== -->
@@ -151,11 +133,7 @@
 
       <!-- Room Cards: Each card represents one FREE room -->
       <div class="rooms-list">
-        <div
-          *ngFor="let room of freeRooms"
-          (click)="openRoomDetail(room)"
-          class="room-card free-card tappable"
-        >
+        <div *ngFor="let room of freeRooms" (click)="openRoomDetail(room)" class="room-card free-card tappable">
           <!-- Left side: Room ID and metadata -->
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
@@ -197,11 +175,8 @@
 
       <!-- Room Cards: Each card represents one BUSY room that will be free soon -->
       <div class="rooms-list">
-        <div
-          *ngFor="let room of availableSoonRooms"
-          (click)="openRoomDetail(room)"
-          class="room-card soon-card tappable"
-        >
+        <div *ngFor="let room of availableSoonRooms" (click)="openRoomDetail(room)"
+          class="room-card soon-card tappable">
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
           </div>
@@ -234,11 +209,8 @@
       <!-- Room Cards: Each card represents one BUSY room -->
       <!-- Note: Only first 8 rooms shown (slice:0:8) -->
       <div *ngIf="busyRooms.length > 0" class="rooms-list">
-        <div
-          *ngFor="let room of busyRooms | slice:0:8"
-          (click)="openRoomDetail(room)"
-          class="room-card busy-card tappable"
-        >
+        <div *ngFor="let room of busyRooms | slice:0:8" (click)="openRoomDetail(room)"
+          class="room-card busy-card tappable">
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
           </div>
