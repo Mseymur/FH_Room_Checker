@@ -17,7 +17,7 @@
  * 4. Applies filters (search, floor) and updates UI
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RefresherEventDetail } from '@ionic/angular';
 import {
@@ -130,6 +130,9 @@ export class BuildingOverviewPage implements OnInit {
   // If true, the app will auto-update to current time on resume/entry
   isAutoTime: boolean = true;
 
+  // ID for the live update timer
+  private liveTimerId?: number;
+
 
   // ========== STATISTICS ==========
   // Displayed in the header stats row
@@ -182,6 +185,9 @@ export class BuildingOverviewPage implements OnInit {
       return;
     }
     await this.loadData();
+
+    // start live timer to update UI time while on this page
+    this.startLiveTimer();
   }
 
   public ionViewWillEnter() {
@@ -195,6 +201,17 @@ export class BuildingOverviewPage implements OnInit {
     if (this.isAutoTime) {
       this.updateToNow();
     }
+    // ensure live timer is running when view is active
+    this.startLiveTimer();
+  }
+
+  public ionViewWillLeave() {
+    // stop live timer when leaving view to avoid background updates
+    this.stopLiveTimer();
+  }
+
+  ngOnDestroy(): void {
+    this.stopLiveTimer();
   }
 
   /**
@@ -204,7 +221,39 @@ export class BuildingOverviewPage implements OnInit {
     this.selectedDateTimeISO = this.getNowISO();
     this.selectedDate = this.selectedDateTimeISO.split('T')[0];
     this.selectedTime = this.selectedDateTimeISO.split('T')[1].substring(0, 5);
+    // Refresh data when explicitly switching to "now" to ensure freshness
     this.loadData();
+  }
+
+  /**
+   * Start a background timer that updates the selected time display
+   * and re-processes room lists without hitting the backend.
+   */
+  private startLiveTimer() {
+    if (this.liveTimerId) return;
+    // update every 10 seconds to keep the display responsive
+    this.liveTimerId = window.setInterval(() => {
+      if (!this.isAutoTime) return;
+
+      const prevTime = this.selectedTime;
+      this.selectedDateTimeISO = this.getNowISO();
+      this.selectedDate = this.selectedDateTimeISO.split('T')[0];
+      this.selectedTime = this.selectedDateTimeISO.split('T')[1].substring(0, 5);
+
+      // Only re-process UI if the minute changed to avoid unnecessary work
+      if (this.selectedTime !== prevTime) {
+        this.processRooms();
+        this.applyFilters();
+        this.updateStats();
+      }
+    }, 10000) as unknown as number;
+  }
+
+  private stopLiveTimer() {
+    if (this.liveTimerId) {
+      clearInterval(this.liveTimerId);
+      this.liveTimerId = undefined;
+    }
   }
 
   onBuildingChange() {
