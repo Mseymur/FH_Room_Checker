@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel API Tester</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+    <!-- Control Panel -->
+    <div class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-2xl font-bold text-blue-900">AP152 <span class="text-blue-600">Live Monitor</span></h1>
+            
+            <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border">
+                <div class="flex flex-col">
+                    <label class="text-xs text-gray-500 uppercase font-bold">Date</label>
+                    <input type="date" id="dateInput" class="bg-transparent font-semibold outline-none text-gray-700">
+                </div>
+                <div class="w-px h-8 bg-gray-300 mx-2"></div>
+                <div class="flex flex-col">
+                    <label class="text-xs text-gray-500 uppercase font-bold">Time</label>
+                    <input type="time" id="timeInput" class="bg-transparent font-semibold outline-none text-gray-700">
+                </div>
+                <button onclick="fetchData()" class="ml-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-bold transition-colors">
+                    Check
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="container mx-auto p-4 max-w-6xl">
+        
+        <!-- Loading Spinner -->
+        <div id="loader" class="hidden text-center py-10">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-gray-500">Fetching fresh data from Laravel...</p>
+        </div>
+
+        <!-- Error Box -->
+        <div id="error-box" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            <p class="font-bold">Error</p>
+            <p id="error-message">Something went wrong.</p>
+        </div>
+
+        <!-- Available Section -->
+        <div id="available-section">
+            <h2 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                <span class="bg-green-100 text-green-700 p-2 rounded-lg mr-2">Available Now</span>
+                <span id="count-free" class="text-sm font-normal text-gray-500 ml-auto">0 rooms</span>
+            </h2>
+            <div id="grid-free" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10"></div>
+        </div>
+
+        <!-- Booked Section -->
+        <div id="occupied-section">
+            <h2 class="text-xl font-bold text-red-800 mb-4 flex items-center border-t pt-8">
+                <span class="bg-red-100 text-red-700 p-2 rounded-lg mr-2">Currently Booked</span>
+                <span id="count-busy" class="text-sm font-normal text-gray-500 ml-auto">0 rooms</span>
+            </h2>
+            <div id="grid-busy" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Initialize inputs
+        const now = new Date();
+        document.getElementById('dateInput').valueAsDate = now;
+        document.getElementById('timeInput').value = now.toTimeString().substring(0, 5);
+
+        async function fetchData() {
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+            
+            const loader = document.getElementById('loader');
+            const errorBox = document.getElementById('error-box');
+            const errorMsg = document.getElementById('error-message');
+            const gridFree = document.getElementById('grid-free');
+            const gridBusy = document.getElementById('grid-busy');
+
+            // Reset UI
+            loader.classList.remove('hidden');
+            errorBox.classList.add('hidden');
+            gridFree.innerHTML = '';
+            gridBusy.innerHTML = '';
+
+            try {
+                const response = await fetch(`/api/free-rooms-now?date=${date}&time=${time}`);
+                
+                // 1. Handle Server Errors (non-200)
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+                }
+
+                // 2. Handle Invalid JSON (e.g., PHP warnings mixed in output)
+                const text = await response.text();
+                let json;
+                try {
+                    json = JSON.parse(text);
+                } catch (e) {
+                    console.error("Raw response:", text);
+                    throw new Error("Invalid JSON received. Check console for raw output.");
+                }
+
+                const rooms = json.data;
+
+                // 3. Process Data
+                let freeCount = 0;
+                let busyCount = 0;
+
+                rooms.forEach(room => {
+                    // Safety check
+                    if (!room) return;
+
+                    const card = createCard(room);
+                    if (room.status === 'FREE') {
+                        gridFree.appendChild(card);
+                        freeCount++;
+                    } else {
+                        gridBusy.appendChild(card);
+                        busyCount++;
+                    }
+                });
+
+                document.getElementById('count-free').innerText = `${freeCount} rooms`;
+                document.getElementById('count-busy').innerText = `${busyCount} rooms`;
+
+                if(freeCount === 0) gridFree.innerHTML = '<p class="text-gray-400 italic col-span-full">No rooms available.</p>';
+                if(busyCount === 0) gridBusy.innerHTML = '<p class="text-gray-400 italic col-span-full">No rooms booked.</p>';
+
+            } catch (error) {
+                console.error(error);
+                errorMsg.innerText = error.message;
+                errorBox.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        function createCard(room) {
+            const div = document.createElement('div');
+            
+            const isFree = room.status === 'FREE';
+            const borderColor = isFree ? 'border-green-500' : 'border-red-500';
+            const bgColor = isFree ? 'bg-white hover:bg-green-50' : 'bg-white hover:bg-red-50';
+            
+            // Safety check for time
+            const endTime = room.free_until ? room.free_until.substring(0, 5) : '??:??';
+
+            let detailHtml = '';
+            if (isFree) {
+                detailHtml = `<p class="text-gray-500 text-sm mt-1">Free until <span class="font-bold text-gray-700">${endTime}</span></p>`;
+            } else {
+                detailHtml = `
+                    <p class="text-gray-800 font-medium text-sm mt-2 line-clamp-1" title="${room.title}">${room.title || 'Untitled'}</p>
+                    <p class="text-gray-500 text-xs mt-1">${room.teacher || 'Unknown Teacher'}</p>
+                    <p class="text-red-600 text-xs mt-2 font-bold uppercase">Available at ${endTime}</p>
+                `;
+            }
+
+            div.className = `${bgColor} border-l-4 ${borderColor} shadow-sm rounded-md p-4 transition-all duration-200 cursor-pointer`;
+            div.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">${room.room || '???'}</h3>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">${room.building} • Floor ${room.floor}</span>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-bold ${isFree ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                        ${isFree ? 'FREE' : 'BUSY'}
+                    </span>
+                </div>
+                ${detailHtml}
+            `;
+            return div;
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
