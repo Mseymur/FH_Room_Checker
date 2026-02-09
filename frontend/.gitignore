@@ -1,1 +1,38 @@
+
+# Dependencies
+/node_modules
+
+# Compiled output
+/www
+/dist
+/out-tsc
+/bazel-out
+
+# Angular
+/.angular
+/tmp
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Misc
+.DS_Store
 .vercel
+npm-debug.log
+yarn-error.log
+testem.log
+
+# Capacitor
+/platforms
+/plugins
