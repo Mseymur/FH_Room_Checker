@@ -1,0 +1,417 @@
+.schedule-header {
+  background: linear-gradient(135deg, #D6001C 0%, #B00017 100%);
+  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  padding: 0;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.header-info {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+
+  .room-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .room-subtitle {
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+    opacity: 0.85;
+  }
+}
+
+.date-time-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  position: relative;
+  height: 48px;
+}
+
+.date-time-picker-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 0 12px;
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  ion-icon {
+    font-size: 1rem;
+
+    &:last-child {
+      margin-left: auto;
+      font-size: 0.875rem;
+    }
+  }
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+}
+
+ion-datetime {
+  --background: #ffffff !important;
+  --ion-background-color: #ffffff !important;
+  --ion-text-color: #000000 !important;
+  --ion-item-background: #ffffff !important;
+  --ion-item-color: #000000 !important;
+  --ion-color-primary: var(--fh-primary) !important;
+  --ion-color-primary-contrast: #ffffff !important;
+  border-radius: 12px;
+  color-scheme: light !important;
+  background: #ffffff !important;
+
+  /* Hide internal dividers */
+  &::part(calendar-separator) {
+    display: none !important;
+  }
+
+  /* Style the time display button (grey to red with white text) */
+  &::part(time-button) {
+    background: var(--fh-primary) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  &::part(time-button-active) {
+    background: var(--fh-primary-dark) !important;
+    color: #ffffff !important;
+  }
+}
+
+/* Perfect centering and forced light theme for the modal */
+ion-modal.datetime-modal {
+  --width: 90%;
+  --max-width: 350px;
+  --height: fit-content;
+  --border-radius: 20px;
+  --background: #ffffff !important;
+  --ion-background-color: #ffffff !important;
+  --ion-text-color: #000000 !important;
+  --ion-item-background: #ffffff !important;
+
+  /* Standard centering for Ionic modals */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  &::part(content) {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    background: #ffffff !important;
+    color: #000000 !important;
+    overflow: hidden;
+    border: none !important;
+  }
+
+  /* Forcefully hide any internal ion-datetime borders */
+  ion-datetime {
+    --border-color: transparent !important;
+    border: none !important;
+
+    &::part(calendar-separator) {
+      display: none !important;
+    }
+  }
+
+  &::part(backdrop) {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+  }
+}
+
+.picker-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  background: #ffffff !important;
+  border-top: none;
+  --ion-background-color: #ffffff !important;
+  --ion-text-color: #000000 !important;
+  color: #000000 !important;
+
+  ion-button {
+    font-size: 0.85rem;
+    height: 40px;
+    margin: 4px;
+    --background: transparent;
+
+    &.cancel-btn {
+      --color: #000000 !important;
+      opacity: 1 !important;
+    }
+
+    &.reset-now-btn {
+      --color: var(--fh-primary) !important;
+      font-weight: 500;
+      --background: transparent;
+    }
+
+    &.apply-btn {
+      --background: var(--fh-primary) !important;
+      --background-activated: var(--fh-primary-dark) !important;
+      --color: #ffffff !important;
+      --border-radius: 12px;
+      font-weight: 700;
+      padding: 0 16px;
+      opacity: 1 !important;
+    }
+  }
+}
+
+.quick-nav {
+  display: flex;
+  gap: 12px;
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.schedule-content {
+  --background: #F5F7FA;
+}
+
+.content-wrapper {
+  padding: 1rem;
+}
+
+.state-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #6C757D;
+  border: 1px solid #E9ECEF;
+  margin-top: 1.5rem;
+
+  ion-icon {
+    font-size: 2rem;
+    color: #ADB5BD;
+  }
+
+  .retry-btn {
+    background: #D6001C;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+  }
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.timeline-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  /* Center time column and card vertically */
+  position: relative;
+
+  &.past {
+    opacity: 0.5;
+  }
+}
+
+.time-column {
+  width: 40px;
+  font-size: 0.75rem;
+  color: #6C757D;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.slot-card {
+  flex: 1;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #E9ECEF;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Center content within card */
+  gap: 0.25rem;
+  position: relative;
+  min-height: 64px;
+}
+
+.timeline-row.free .slot-card {
+  border: 2px solid #28A745;
+  background: #d4edda;
+}
+
+.timeline-row.busy .slot-card {
+  border-left: 4px solid #DC3545;
+  background: white;
+}
+
+.timeline-row.current .slot-card {
+  box-shadow: 0 4px 12px rgba(214, 0, 28, 0.15);
+}
+
+.slot-status {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #212529;
+
+  .timeline-row.free & {
+    color: #28A745;
+    font-weight: 700;
+    font-size: 1.25rem;
+
+    ion-icon {
+      color: #28A745;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.slot-details {
+  font-size: 0.85rem;
+
+  .class-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1c2e36;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .class-teacher {
+    font-size: 1.05rem;
+    color: #555;
+    font-weight: 400;
+  }
+}
+
+.slot-meta {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.now-chip {
+  background: #D6001C;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.next-event {
+  margin-top: 1rem;
+  background: #FFF5F5;
+  border: 1px solid #F8D7DA;
+  color: #B00017;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.after-hours-text {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(214, 0, 28, 0.08);
+  border: 1px solid rgba(214, 0, 28, 0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6C757D;
+  font-size: 0.8125rem;
+
+  ion-icon {
+    font-size: 1rem;
+    color: #D6001C;
+  }
+
+  span {
+    color: #495057;
+  }
+}

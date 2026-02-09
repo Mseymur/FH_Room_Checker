@@ -1,0 +1,194 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* FH Brand Theme - @use must be before any other at-rules */
+@use 'theme/variables.scss';
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fh-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  font-size: 16px;
+}
+
+h1{
+  font-size: 28px;
+  font-weight: bolder;
+}
+
+h2{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+h3{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.alert-wrapper{
+  background-color: #f0f0f0 !important;
+  color: var(--fh-text-primary) !important;
+
+  .alert-title{
+    color: black !important;
+  }
+
+  .alert-radio-label{
+    color: black !important;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fh-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fh-gray-400);
+  border-radius: var(--fh-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fh-gray-500);
+}
+
+/* Utility Classes */
+.fh-gradient-primary {
+  background: linear-gradient(135deg, var(--fh-primary) 0%, var(--fh-primary-dark) 100%);
+}
+
+.fh-gradient-success {
+  background: linear-gradient(135deg, var(--fh-success) 0%, #1E7E34 100%);
+}
+
+.fh-text-gradient {
+  background: linear-gradient(135deg, var(--fh-primary) 0%, var(--fh-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fh-card {
+  background: var(--fh-bg-card);
+  border-radius: var(--fh-radius-lg);
+  box-shadow: var(--fh-shadow);
+  transition: all var(--fh-transition);
+}
+
+.fh-card:hover {
+  box-shadow: var(--fh-shadow-md);
+  transform: translateY(-2px);
+}
+
+.fh-button-primary {
+  background: var(--fh-primary);
+  color: var(--fh-text-white);
+  border: none;
+  border-radius: var(--fh-radius);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all var(--fh-transition);
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.fh-button-primary:hover {
+  background: var(--fh-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--fh-shadow-md);
+}
+
+.fh-button-primary:active {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.fh-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.fh-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.fh-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
