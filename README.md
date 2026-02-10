@@ -154,4 +154,4 @@ Key endpoints defined in `routes/api.php`:
 
 ## 📄 License
 
-This project is an academic project for FH JOANNEUM.
+[License](license)
