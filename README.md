@@ -154,4 +154,4 @@ Key endpoints defined in `routes/api.php`:
 
 ## 📄 License
 
-[License](license)
+[License](LICENSE)
