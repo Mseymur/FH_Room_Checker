@@ -1,7 +1,7 @@
 FH ROOM CHECKER LICENSE (PROPRIETARY / EVALUATION ONLY)
 Version 1.0
 
-Copyright (c) 2024–2026 Seymur Mammadov
+Copyright (c) 2024–2026 Seymur Mammadov and Jakob Schnurrer
 All rights reserved.
 
 Permission is hereby granted to any person obtaining a copy of this repository and its contents (the “Software”) to
@@ -22,7 +22,7 @@ YOU MAY NOT, WITHOUT PRIOR WRITTEN PERMISSION FROM THE COPYRIGHT HOLDER:
 
 ATTRIBUTION:
 If you reference this project publicly (e.g., blog post, talk, coursework), you must credit:
-“FH Room Checker — Seymur Mammadov” and link to the original repository.
+“FH Room Checker — Seymur Mammadov & Jakob Schnurrer” and link to the original repository.
 
 THIRD-PARTY COMPONENTS:
 This repository may include or reference third-party SDKs, drivers, runtimes, DLLs, and other components.

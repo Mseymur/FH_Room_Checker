@@ -149,8 +149,8 @@ Key endpoints defined in `routes/api.php`:
 
 ## 👥 Authors
 
-*   **Seymur Mammadov**
-*   **Jakob Schnurrer**
+*   **Seymur Mammadov** (Co-founder)
+*   **Jakob Schnurrer** (Co-founder)
 
 ## 📄 License
 
