@@ -6,7 +6,7 @@ import {
   IonContent, IonHeader, 
   IonItem, IonList, IonSelect, IonSelectOption, 
   IonTextarea, ToastController,
-  IonIcon
+  IonIcon, IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chatbubbleEllipsesOutline, informationCircleOutline } from 'ionicons/icons';
@@ -20,12 +20,13 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
   imports: [
     IonContent, IonHeader, 
     IonItem, IonList, IonSelect, IonSelectOption, 
-    IonTextarea, CommonModule, FormsModule, IonIcon
+    IonTextarea, CommonModule, FormsModule, IonIcon, IonInput
   ]
 })
 export class FeedbackPage {
   feedbackObj = {
     category: '',
+    email: '',
     description: ''
   };
 
@@ -51,11 +52,12 @@ export class FeedbackPage {
       const fbCollection = collection(this.firestore, 'user_feedback');
       await addDoc(fbCollection, {
         category: this.feedbackObj.category,
+        email: this.feedbackObj.email || null,
         description: this.feedbackObj.description,
         timestamp: new Date()
       });
       await this.showToast('Feedback submitted successfully! Thank you.', 'success');
-      this.feedbackObj = { category: '', description: '' }; // reset form
+      this.feedbackObj = { category: '', email: '', description: '' }; // reset form
     } catch (error) {
       console.error('Error adding document: ', error);
       await this.showToast('Failed to submit feedback. Please try again later.', 'danger');

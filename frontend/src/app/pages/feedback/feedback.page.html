@@ -31,6 +31,10 @@
           </ion-select>
         </ion-item>
 
+        <ion-item class="custom-item" lines="none">
+          <ion-input type="email" label="Email Address (Optional)" label-placement="stacked" [(ngModel)]="feedbackObj.email" placeholder="So we can follow up with you"></ion-input>
+        </ion-item>
+
         <ion-item class="custom-item textarea-item" lines="none">
           <ion-textarea 
             label="Description" 

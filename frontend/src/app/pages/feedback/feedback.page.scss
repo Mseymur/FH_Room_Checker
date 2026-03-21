@@ -126,7 +126,7 @@
   --ion-color-primary: #495057 !important;
   
   // Define input text properties
-  ion-select, ion-textarea {
+  ion-select, ion-textarea, ion-input {
     font-size: 0.9375rem;
     color: #495057 !important; // Low dark
     --placeholder-color: #adb5bd !important;
@@ -154,7 +154,7 @@
   &.item-has-focus, &.item-has-value, &.ion-valid, &.ion-focused {
     border-color: #ced4da !important; // Slightly darker border upon interaction instead of standard highlight
     
-    ion-select, ion-textarea {
+    ion-select, ion-textarea, ion-input {
       color: #212529 !important; // Darker dark
       --color: #212529 !important;
       
