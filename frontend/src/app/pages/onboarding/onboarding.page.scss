@@ -7,16 +7,15 @@
 .onboarding-container {
   max-width: 480px;
   margin: 0 auto;
-  padding-top: calc(1rem + env(safe-area-inset-top));
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  padding-top: calc(3rem + env(safe-area-inset-top));
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom));
   padding-left: calc(1rem + env(safe-area-inset-left));
   padding-right: calc(1rem + env(safe-area-inset-right));
-  height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  //position: relative;
   z-index: 1;
-  justify-content: center !important;
+  justify-content: flex-start;
 }
 
 // Compact Hero Section
