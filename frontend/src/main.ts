@@ -9,6 +9,13 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { HttpClientModule } from '@angular/common/http'; // <--- IMPORT THIS
 
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+// Initialize Firebase
+const app = initializeApp(environment.firebaseConfig);
+const analytics = getAnalytics(app);
+
 if (environment.production) {
   enableProdMode();
 }
