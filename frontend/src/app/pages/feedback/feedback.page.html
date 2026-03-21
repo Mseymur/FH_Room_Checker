@@ -1,0 +1,66 @@
+<ion-header class="ion-no-border">
+  <div class="header-wrapper">
+    <div class="header-top">
+      <button class="back-btn" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <div class="header-center">
+        <h1 class="header-title">Submit Feedback</h1>
+      </div>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="main-content">
+  <div class="content-area">
+    <div class="feedback-card section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <ion-icon name="chatbubble-ellipses-outline" class="title-icon"></ion-icon>
+          We value your input!
+        </h2>
+      </div>
+      <p class="feedback-description">Please let us know how we can improve the app or report any issues.</p>
+
+      <ion-list class="custom-list lines-none">
+        <ion-item class="custom-item" lines="none">
+          <ion-select label="Category" label-placement="stacked" [(ngModel)]="feedbackObj.category" placeholder="Select a category" interface="popover">
+            <ion-select-option value="Bug">Bug Report</ion-select-option>
+            <ion-select-option value="Feature Request">Feature Request</ion-select-option>
+            <ion-select-option value="General">General Feedback</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="custom-item textarea-item" lines="none">
+          <ion-textarea 
+            label="Description" 
+            label-placement="stacked" 
+            [(ngModel)]="feedbackObj.description" 
+            placeholder="Describe your feedback in detail..." 
+            [autoGrow]="true" 
+            rows="5">
+          </ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <div class="action-button-container">
+        <button class="action-btn" (click)="submitFeedback()" [disabled]="!feedbackObj.category || !feedbackObj.description.trim()">
+          Submit Feedback
+        </button>
+      </div>
+
+      <!-- Unified Footer (Without feedback button) -->
+      <div class="app-footer">
+        <div class="footer-actions">
+          <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank" class="footer-btn outline-btn">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            Learn More
+          </a>
+        </div>
+        <div class="developer-credits">
+          <p>App developed by <a href="https://mseymur.framer.website/" target="_blank" class="credit-link">Seymur Mammadov</a> & <a href="https://www.linkedin.com/in/schnurrerjakob/" target="_blank" class="credit-link">Jakob Schnurrer</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

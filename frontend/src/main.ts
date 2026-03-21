@@ -9,12 +9,8 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { HttpClientModule } from '@angular/common/http'; // <--- IMPORT THIS
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-// Initialize Firebase
-const app = initializeApp(environment.firebaseConfig);
-const analytics = getAnalytics(app);
+import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 
 if (environment.production) {
   enableProdMode();
@@ -26,6 +22,8 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     importProvidersFrom(HttpClientModule), // <--- ADD THIS LINE
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
   ],
 });
 

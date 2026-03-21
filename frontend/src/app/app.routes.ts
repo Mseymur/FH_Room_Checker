@@ -17,4 +17,8 @@ export const routes: Routes = [
     path: 'room-schedule/:building/:roomId',
     loadComponent: () => import('./pages/room-schedule/room-schedule.page').then( m => m.RoomSchedulePage)
   },
+  {
+    path: 'feedback',
+    loadComponent: () => import('./pages/feedback/feedback.page').then( m => m.FeedbackPage)
+  },
 ];

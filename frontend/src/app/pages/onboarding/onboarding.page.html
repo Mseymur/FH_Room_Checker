@@ -4,38 +4,33 @@
     <!-- Compact Hero Section -->
     <div class="hero-section">
       <div class="logo-container">
-        <div class="fh-logo">
-          <div class="logo-circle"></div>
-          <span class="logo-text">FH</span>
+        <div class="fh-logo" style="background: white; border-radius: 50%; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+          <img src="assets/icon/favicon.png" alt="FH Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: contain;" />
         </div>
       </div>
 
       <h1 class="hero-title">
         <span class="fh-text-gradient">Room Checker</span>
       </h1>
-      <!--
       <p class="hero-subtitle">
-        See which rooms are free right now at your campus
+        Find an empty classroom to study in seconds.
       </p>
-      -->
     </div>
 
     <!-- Compact Info Cards - De-emphasized -->
     <div class="features-section">
-      <div class="feature-item">
+      <div class="feature-item column-layout">
+        <ion-icon name="search-outline" class="feature-icon"></ion-icon>
         <div class="feature-content">
-          <div class="title-wrapper">
-            <ion-icon name="information-circle-outline" class="feature-icon"></ion-icon>
-            <h3>Updates</h3>
-          </div>
-          <p>Room availability is updated every 2 hours</p>
+          <h3>Find Free Rooms</h3>
+          <p>Instantly discover which classrooms are currently empty and available.</p>
         </div>
       </div>
-      <div class="feature-item">
-        <ion-icon name="information-circle-outline" class="feature-icon"></ion-icon>
+      <div class="feature-item column-layout">
+        <ion-icon name="time-outline" class="feature-icon"></ion-icon>
         <div class="feature-content">
-          <h3>Locations</h3>
-          <p>Access schedules for all FH Joanneum buildings</p>
+          <h3>Real-time Schedules</h3>
+          <p>Check daily room schedules to plan your study sessions without interruptions.</p>
         </div>
       </div>
     </div>
@@ -74,14 +69,32 @@
         [class.loading]="loading"
         [class.enabled]="selectedBuilding && !loading"
       >
+        <div class="button-content" *ngIf="!loading">
           View Available Rooms
+        </div>
+        <div class="button-content" *ngIf="loading">
+          <ion-spinner name="crescent" class="button-spinner"></ion-spinner>
+          <span>Syncing...</span>
+        </div>
     </button>
     </div>
 
-    <!-- Developer Credits -->
-    <div style="text-align: center; margin-top: 30px; font-size: 13px; color: var(--ion-color-medium); opacity: 0.8; padding-bottom: 20px;">
-      <p style="margin: 0 0 8px 0;">The App was developed by <a href="https://mseymur.framer.website/" target="_blank" style="color: var(--ion-color-primary); text-decoration: none; font-weight: 500;">Seymur Mammadov</a> & <a href="https://www.linkedin.com/in/schnurrerjakob/" target="_blank" style="color: var(--ion-color-primary); text-decoration: none; font-weight: 500;">Jakob Schnurrer</a></p>
-      <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank" style="color: var(--ion-color-primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">Learn More <ion-icon name="arrow-forward-outline" style="font-size: 14px;"></ion-icon></a>
+    <!-- Unified Footer -->
+    <div class="app-footer">
+      <div class="footer-actions">
+        <!-- Prominent feedback button within footer -->
+        <button class="footer-btn feedback-btn" (click)="goToFeedback()">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          Give Feedback
+        </button>
+        <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank" class="footer-btn outline-btn">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Learn More
+        </a>
+      </div>
+      <div class="developer-credits">
+        <p>App developed by <a href="https://mseymur.framer.website/" target="_blank" class="credit-link">Seymur Mammadov</a> & <a href="https://www.linkedin.com/in/schnurrerjakob/" target="_blank" class="credit-link">Jakob Schnurrer</a></p>
+      </div>
     </div>
 
   </div>

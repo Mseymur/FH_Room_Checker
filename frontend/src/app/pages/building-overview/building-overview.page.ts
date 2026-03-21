@@ -34,7 +34,7 @@ import { addIcons } from 'ionicons';
 import {
   calendarClearOutline, searchOutline, alertCircle,
   checkmarkCircle, chevronForward, informationCircleOutline,
-  timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline
+  timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline, chatbubbleEllipsesOutline
 } from 'ionicons/icons';
 
 /**
@@ -156,7 +156,8 @@ export class BuildingOverviewPage implements OnInit {
     addIcons({
       calendarClearOutline, searchOutline, alertCircle,
       checkmarkCircle, chevronForward, informationCircleOutline,
-      timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline
+      timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline,
+      chatbubbleEllipsesOutline
     });
   }
 
@@ -734,5 +735,9 @@ export class BuildingOverviewPage implements OnInit {
         date: this.selectedDate
       }
     });
+  }
+
+  goToFeedback() {
+    this.router.navigate(['/feedback']);
   }
 }

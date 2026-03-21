@@ -1,0 +1,290 @@
+// Header
+.header-wrapper {
+  background: linear-gradient(135deg, #d6001c 0%, #b00017 100%);
+  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  width: 40px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  ion-icon {
+    font-size: 1.25rem;
+  }
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding-right: 40px; // Offset for back button to perfectly center title
+  
+  .header-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+// Content Layout
+.main-content {
+  --background: #f5f7fa;
+}
+
+.content-area {
+  padding: 1rem;
+  padding-bottom: 3rem;
+}
+
+// Feedback Card Structure matching room cards
+.feedback-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  
+  .feedback-description {
+    color: #6c757d;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+  }
+}
+
+.section-header {
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  
+  .title-icon {
+    font-size: 1.25rem;
+    color: #d6001c;
+  }
+}
+
+// Custom Form Styling
+.custom-list {
+  background: transparent;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.custom-item {
+  --background: #f8f9fa;
+  --border-radius: 12px;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  --inner-padding-end: 0;
+  
+  // Completely remove native ionic borders and force success/primary colors away
+  --border-width: 0 !important;
+  --inner-border-width: 0 !important;
+  --highlight-color-focused: transparent !important;
+  --highlight-color-valid: transparent !important;
+  --highlight-color-invalid: transparent !important;
+  --highlight-color: transparent !important;
+  --ion-color-success: #495057 !important;
+  --ion-color-primary: #495057 !important;
+  
+  // Define input text properties
+  ion-select, ion-textarea {
+    font-size: 0.9375rem;
+    color: #495057 !important; // Low dark
+    --placeholder-color: #adb5bd !important;
+    --color: #495057 !important; 
+    --background: transparent !important;
+    --border-width: 0 !important;
+    --border-style: none !important;
+    background: transparent !important;
+    transition: color 0.2s;
+    
+    // Override the green label highlight to match our requested colors
+    &::part(label) {
+      color: #6c757d !important; // A neutral grey instead of primary color
+    }
+    
+    &::part(container) {
+      // Remove any internal container borders/shadows from ionic form variants
+      border: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+    }
+  }
+  
+  // When focused or has value, text becomes darker
+  &.item-has-focus, &.item-has-value, &.ion-valid, &.ion-focused {
+    border-color: #ced4da !important; // Slightly darker border upon interaction instead of standard highlight
+    
+    ion-select, ion-textarea {
+      color: #212529 !important; // Darker dark
+      --color: #212529 !important;
+      
+      &::part(label) {
+        color: #495057 !important; 
+      }
+    }
+  }
+
+  &::part(native) {
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.textarea-item {
+  align-items: flex-start;
+  padding-top: 0;
+  padding-bottom: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --inner-padding-top: 0;
+  --inner-padding-bottom: 0;
+}
+
+// Action Button overriding standard Ionic button
+.action-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.action-btn {
+  background: #d6001c;
+  color: white;
+  border: none;
+  border-radius: 24px; // Pill shape
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(214, 0, 28, 0.2);
+
+  &:hover:not(:disabled) {
+    background: #b00017;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(214, 0, 28, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    background: #e9ecef;
+    color: #adb5bd;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+// Unified Footer
+.app-footer {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  text-align: center;
+  
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 24px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+  
+  .outline-btn {
+    background: white;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    
+    &:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+      color: #212529;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+  }
+  
+  .developer-credits {
+    p {
+      margin: 0;
+      color: #868e96;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    
+    .credit-link {
+      color: #495057;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: rgba(73, 80, 87, 0.4);
+      transition: all 0.2s;
+      
+      &:hover {
+        color: #d6001c;
+        text-decoration-color: #d6001c;
+      }
+    }
+  }
+}

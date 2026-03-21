@@ -116,6 +116,15 @@
       --padding-start: 1rem;
       --padding-end: 1rem;
       --min-height: 48px;
+      
+      // Stop native Ionic lines
+      --border-width: 0 !important;
+      --inner-border-width: 0 !important;
+      
+      &::part(native) {
+        border-bottom: none !important;
+        box-shadow: none !important;
+      }
 
       // Default state - neutral
       border: 1px solid #DEE2E6;
@@ -141,12 +150,23 @@
       // Icon - neutral
       --icon-color: #6C757D;
 
-      // Override Ionic's green valid state: use brand red for border and highlight
-      --highlight-color: #d6001d;
+      // Override Ionic's green valid state: use brand red for border
       --border-color: #D6001C;
 
-      // Focus state - red
-      --highlight-color-focused: #D6001C;
+      // Completely remove the select highlight line from Ionic
+      --highlight-color-focused: transparent !important;
+      --highlight-color-valid: transparent !important;
+      --highlight-color-invalid: transparent !important;
+      --highlight-color: transparent !important;
+
+      // Keep label color correct when forced highlight color is removed
+      &::part(label) {
+        transition: color 0.15s;
+      }
+      
+      &.ion-focused::part(label), &.has-value::part(label) {
+        color: #D6001C !important;
+      }
 
       // Hover
       &:hover:not(:focus-within) {
@@ -160,7 +180,7 @@
         --icon-color: #D6001C;
       }
 
-      // Selected state - green border (success)
+      // Selected state - red border (success)
       &.has-selection {
         border-color: #D6001C;
         --icon-color: #D6001C;
@@ -202,31 +222,38 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    padding: 1.2rem 1rem;
+    padding: 1.25rem 1rem;
     background: white;
     border-radius: 10px;
     margin-bottom: 0.5rem;
     border: 1px solid #E9ECEF;
-    opacity: 0.9; // De-emphasized
+    opacity: 0.9;
+    
+    // Stack icon above content
+    &.column-layout {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .feature-icon {
+        margin-top: 0;
+        margin-bottom: 0.25rem;
+        font-size: 1.25rem;
+      }
+    }
 
     .feature-icon {
       font-size: 1.125rem;
       color: black;
       flex-shrink: 0;
-      margin-top: 0.125rem;
     }
 
     .feature-content {
       flex: 1;
 
-      .title-wrapper {
-        flex-direction: row !important;
-      }
-
       h3 {
         font-weight: 600;
         color: #212529;
-        margin: 0 0 0.125rem;
+        margin: 0 0 0.25rem;
       }
 
       p {
@@ -333,5 +360,93 @@
 
   .selection-card {
     padding: 1rem;
+  }
+}
+
+// Unified Footer
+.app-footer {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  text-align: center;
+  
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 24px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+  
+  .feedback-btn {
+    background: #d6001c;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(214, 0, 28, 0.2);
+    
+    &:hover {
+      background: #b00017;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(214, 0, 28, 0.3);
+    }
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .outline-btn {
+    background: white;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    
+    &:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+      color: #212529;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+  }
+  
+  .developer-credits {
+    p {
+      margin: 0;
+      color: #868e96;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    
+    .credit-link {
+      color: #495057;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: rgba(73, 80, 87, 0.4);
+      transition: all 0.2s;
+      
+      &:hover {
+        color: #d6001c;
+        text-decoration-color: #d6001c;
+      }
+    }
   }
 }

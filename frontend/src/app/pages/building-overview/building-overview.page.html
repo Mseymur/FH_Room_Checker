@@ -244,16 +244,22 @@
       <button (click)="loadData()" class="action-btn">Refresh</button>
     </div>
 
-    <!-- Developer Credits -->
-    <div
-      style="text-align: center; margin-top: 40px; font-size: 13px; color: var(--ion-color-medium); opacity: 0.8; padding-bottom: 30px;">
-      <p style="margin: 0 0 8px 0;">The App was developed by <a href="https://mseymur.framer.website/" target="_blank"
-          style="color: var(--ion-color-primary); text-decoration: none; font-weight: 500;">Seymur Mammadov</a> & <a
-          href="https://www.linkedin.com/in/schnurrerjakob/" target="_blank"
-          style="color: var(--ion-color-primary); text-decoration: none; font-weight: 500;">Jakob Schnurrer</a></p>
-      <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank"
-        style="color: var(--ion-color-primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">Learn
-        More <ion-icon name="arrow-forward-outline" style="font-size: 14px;"></ion-icon></a>
+    <!-- Unified Footer -->
+    <div class="app-footer">
+      <div class="footer-actions">
+        <!-- Prominent feedback button within footer -->
+        <button class="footer-btn feedback-btn" (click)="goToFeedback()">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          Give Feedback
+        </button>
+        <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank" class="footer-btn outline-btn">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Learn More
+        </a>
+      </div>
+      <div class="developer-credits">
+        <p>App developed by <a href="https://mseymur.framer.website/" target="_blank" class="credit-link">Seymur Mammadov</a> & <a href="https://www.linkedin.com/in/schnurrerjakob/" target="_blank" class="credit-link">Jakob Schnurrer</a></p>
+      </div>
     </div>
 
   </div>

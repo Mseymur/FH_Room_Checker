@@ -25,7 +25,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BuildingService } from 'src/app/services/building';
 import { addIcons } from 'ionicons';
-import { arrowBack, calendarOutline, chevronBack, chevronForward, alertCircle, checkmarkCircle, timeOutline, informationCircleOutline } from 'ionicons/icons';
+import { arrowBack, calendarOutline, chevronBack, chevronForward, alertCircle, checkmarkCircle, timeOutline, informationCircleOutline, chatbubbleEllipsesOutline } from 'ionicons/icons';
 
 /**
  * Room Slot Data Model
@@ -95,7 +95,7 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private platform: Platform
   ) {
-    addIcons({ arrowBack, calendarOutline, chevronBack, chevronForward, alertCircle, checkmarkCircle, timeOutline, informationCircleOutline });
+    addIcons({ arrowBack, calendarOutline, chevronBack, chevronForward, alertCircle, checkmarkCircle, timeOutline, informationCircleOutline, chatbubbleEllipsesOutline });
   }
 
   /**
@@ -418,5 +418,9 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
       const mins = diffMins % 60;
       this.nextEventText = mins > 0 ? `${label} in ${hours}h ${mins}m` : `${label} in ${hours}h`;
     }
+  }
+
+  goToFeedback() {
+    this.router.navigate(['/feedback']);
   }
 }

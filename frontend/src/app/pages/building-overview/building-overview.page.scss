@@ -398,6 +398,25 @@ ion-datetime-button {
   border-left: 6px solid #28a745; // Green for free
 }
 
+.after-hours-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: #6c757d; // Visible grey color instead of white
+  font-size: 0.875rem;
+  font-weight: 500;
+  justify-content: center;
+  background: white; // Make it stand out inside the card section
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px solid #e9ecef;
+  
+  ion-icon {
+    font-size: 1.125rem;
+  }
+}
+
 .soon-card {
   border-left: 6px solid #ffc107; // Yellow/orange for available soon
 }
@@ -730,6 +749,94 @@ ion-modal.datetime-modal {
       font-weight: 700;
       padding: 0 16px;
       opacity: 1 !important;
+    }
+  }
+}
+
+// Unified Footer
+.app-footer {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  text-align: center;
+  
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 24px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+  
+  .feedback-btn {
+    background: #d6001c;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(214, 0, 28, 0.2);
+    
+    &:hover {
+      background: #b00017;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(214, 0, 28, 0.3);
+    }
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .outline-btn {
+    background: white;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    
+    &:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+      color: #212529;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+  }
+  
+  .developer-credits {
+    p {
+      margin: 0;
+      color: #868e96;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    
+    .credit-link {
+      color: #495057;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: rgba(73, 80, 87, 0.4);
+      transition: all 0.2s;
+      
+      &:hover {
+        color: #d6001c;
+        text-decoration-color: #d6001c;
+      }
     }
   }
 }
