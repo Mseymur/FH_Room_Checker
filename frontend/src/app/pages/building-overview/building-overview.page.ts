@@ -734,6 +734,10 @@ export class BuildingOverviewPage implements OnInit {
     });
   }
 
+  goToFeedback() {
+    this.navCtrl.navigateForward('/feedback');
+  }
+
   trackByRoomId(index: number, room: Room): string {
     return room.room_id;
   }
