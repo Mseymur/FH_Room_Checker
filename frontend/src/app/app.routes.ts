@@ -4,7 +4,6 @@ import { buildingSelectedGuard } from './guards/building-selected.guard';
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [buildingSelectedGuard],
     loadComponent: () => import('./pages/building-overview/building-overview.page').then(m => m.BuildingOverviewPage)
   },
   {

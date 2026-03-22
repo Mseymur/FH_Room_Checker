@@ -195,8 +195,7 @@ export class BuildingOverviewPage implements OnInit {
     });
 
     if (!this.buildingName) {
-      this.error = 'No building selected. Please go back and select a building.';
-      this.loading = false;
+      this.router.navigate(['/welcome']);
       return;
     }
     await this.loadData();
@@ -207,16 +206,20 @@ export class BuildingOverviewPage implements OnInit {
 
   public ionViewWillEnter() {
     const serviceBuilding = this.buildingService.getSelectedBuilding();
-    if (serviceBuilding && serviceBuilding !== this.selectedBuilding) {
-      this.selectedBuilding = serviceBuilding;
-      this.onBuildingChange();
+
+    if (!serviceBuilding) {
+      this.router.navigate(['/welcome']);
+      return;
     }
 
-    // Update time if we are in auto mode
-    if (this.isAutoTime) {
+    if (serviceBuilding !== this.selectedBuilding) {
+      this.selectedBuilding = serviceBuilding;
+      this.buildingName = serviceBuilding;
+      this.onBuildingChange();
+    } else if (this.isAutoTime) {
       this.updateToNow();
     }
-    // ensure live timer is running when view is active
+
     this.startLiveTimer();
   }
 
