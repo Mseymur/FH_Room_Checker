@@ -82,7 +82,7 @@ export class OnboardingPage {
 
       // Small delay for UX
       setTimeout(() => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/building-overview']);
       }, 300);
 
     } catch (error: any) {

@@ -195,7 +195,8 @@ export class BuildingOverviewPage implements OnInit {
     });
 
     if (!this.buildingName) {
-      this.router.navigate(['/welcome']);
+      this.error = 'No building selected. Please go back and select a building.';
+      this.loading = false;
       return;
     }
     await this.loadData();
@@ -206,20 +207,16 @@ export class BuildingOverviewPage implements OnInit {
 
   public ionViewWillEnter() {
     const serviceBuilding = this.buildingService.getSelectedBuilding();
-
-    if (!serviceBuilding) {
-      this.router.navigate(['/welcome']);
-      return;
+    if (serviceBuilding && serviceBuilding !== this.selectedBuilding) {
+      this.selectedBuilding = serviceBuilding;
+      this.onBuildingChange();
     }
 
-    if (serviceBuilding !== this.selectedBuilding) {
-      this.selectedBuilding = serviceBuilding;
-      this.buildingName = serviceBuilding;
-      this.onBuildingChange();
-    } else if (this.isAutoTime) {
+    // Update time if we are in auto mode
+    if (this.isAutoTime) {
       this.updateToNow();
     }
-
+    // ensure live timer is running when view is active
     this.startLiveTimer();
   }
 
@@ -330,7 +327,7 @@ export class BuildingOverviewPage implements OnInit {
         this.error = `Server Error: ${e.status} - ${e.statusText}`;
         // Redirect to onboarding on server errors (4xx, 5xx)
         if (e.status >= 400) {
-          await this.router.navigate(['/welcome']);
+          await this.router.navigate(['/home']);
           return;
         }
       } else {
@@ -719,7 +716,7 @@ export class BuildingOverviewPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/home']);
   }
 
 
