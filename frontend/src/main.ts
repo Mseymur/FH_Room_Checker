@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http'; // <--- IMPORT THIS
 
 import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
 import { getFirestore, provideFirestore } from "@angular/fire/firestore";
+import { getAuth, provideAuth } from "@angular/fire/auth";
+import { initializeAppCheck, ReCaptchaV3Provider, provideAppCheck } from "@angular/fire/app-check";
 
 if (environment.production) {
   enableProdMode();
@@ -23,7 +25,12 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     importProvidersFrom(HttpClientModule), // <--- ADD THIS LINE
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAppCheck(() => initializeAppCheck(undefined, {
+      provider: new ReCaptchaV3Provider(environment.recaptchaSiteKey),
+      isTokenAutoRefreshEnabled: true
+    })),
     provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
   ],
 });
 

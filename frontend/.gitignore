@@ -1,1 +1,5 @@
 .vercel
+.angular/cache
+
+# Generated at build time from Vercel environment variables — never commit real values
+src/environments/environment.prod.ts

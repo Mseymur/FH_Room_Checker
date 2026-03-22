@@ -10,7 +10,8 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chatbubbleEllipsesOutline, informationCircleOutline } from 'ionicons/icons';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
+import { Auth, signInAnonymously } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-feedback',
@@ -31,6 +32,7 @@ export class FeedbackPage {
   };
 
   private firestore: Firestore = inject(Firestore);
+  private auth: Auth = inject(Auth);
   private toastController = inject(ToastController);
   private router: Router = inject(Router);
 
@@ -49,12 +51,14 @@ export class FeedbackPage {
     }
 
     try {
+      await signInAnonymously(this.auth);
+
       const fbCollection = collection(this.firestore, 'user_feedback');
       await addDoc(fbCollection, {
         category: this.feedbackObj.category,
         email: this.feedbackObj.email || null,
         description: this.feedbackObj.description,
-        timestamp: new Date()
+        timestamp: serverTimestamp()
       });
       await this.showToast('Feedback submitted successfully! Thank you.', 'success');
       this.feedbackObj = { category: '', email: '', description: '' }; // reset form
