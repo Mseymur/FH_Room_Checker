@@ -3,15 +3,11 @@ import { buildingSelectedGuard } from './guards/building-selected.guard';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./pages/onboarding/onboarding.page').then( m => m.OnboardingPage)
+    path: 'welcome',
+    loadComponent: () => import('./pages/welcome/welcome.page').then( m => m.WelcomePage)
   },
   {
     path: '',
-    loadComponent: () => import('./pages/startup/startup.page').then(m => m.StartupPage)
-  },
-  {
-    path: 'building-overview',
     canActivate: [buildingSelectedGuard],
     loadComponent: () => import('./pages/building-overview/building-overview.page').then( m => m.BuildingOverviewPage)
   },

@@ -90,6 +90,10 @@ export class FeedbackPage {
     }
   }
 
+  goBack() {
+    this.navCtrl.navigateRoot(['/']);
+  }
+
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message,

@@ -217,13 +217,13 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
 
       // Redirect to onboarding on errors
       if (e instanceof Error && e.message.includes('404')) {
-        await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
+        await this.navCtrl.navigateRoot('/welcome', { replaceUrl: true });
         return;
       }
 
       // Also check for HTTP errors
       if (e?.status && e.status >= 400) {
-        await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
+        await this.navCtrl.navigateRoot('/welcome', { replaceUrl: true });
         return;
       }
     } finally {
@@ -232,7 +232,7 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.navCtrl.navigateBack(['/building-overview']);
+    this.navCtrl.navigateBack(['/']);
   }
 
   previousDay() {

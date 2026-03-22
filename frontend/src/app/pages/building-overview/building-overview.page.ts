@@ -327,7 +327,7 @@ export class BuildingOverviewPage implements OnInit {
         this.error = `Server Error: ${e.status} - ${e.statusText}`;
         // Redirect to onboarding on server errors (4xx, 5xx)
         if (e.status >= 400) {
-          await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
+          await this.navCtrl.navigateRoot('/welcome', { replaceUrl: true });
           return;
         }
       } else {
@@ -716,7 +716,7 @@ export class BuildingOverviewPage implements OnInit {
   }
 
   goBack() {
-    this.navCtrl.navigateRoot('/home', { replaceUrl: true });
+    this.navCtrl.navigateRoot('/welcome', { replaceUrl: true });
   }
 
 

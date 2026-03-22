@@ -27,13 +27,13 @@ import { informationCircleOutline, searchOutline, timeOutline, chatbubbleEllipse
 import { BuildingService } from 'src/app/services/building';
 
 @Component({
-  selector: 'app-onboarding',
-  templateUrl: './onboarding.page.html',
-  styleUrls: ['./onboarding.page.scss'],
+  selector: 'app-welcome',
+  templateUrl: './welcome.page.html',
+  styleUrls: ['./welcome.page.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, IonContent, IonIcon, IonSelect, IonSelectOption, IonSpinner]
 })
-export class OnboardingPage {
+export class WelcomePage {
   // ========== BUILDING SELECTION ==========
   selectedBuilding: string = ''; // Selected building code (e.g., 'AP152')
   buildings = this.buildingService.buildings; // List of available buildings (from service)
@@ -81,7 +81,7 @@ export class OnboardingPage {
 
       // Small delay for UX
       setTimeout(() => {
-        this.navCtrl.navigateRoot('/building-overview', { replaceUrl: true });
+        this.navCtrl.navigateRoot('/', { replaceUrl: true });
       }, 300);
 
     } catch (error: any) {
