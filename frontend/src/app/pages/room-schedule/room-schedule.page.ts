@@ -218,13 +218,13 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
 
       // Redirect to onboarding on errors
       if (e instanceof Error && e.message.includes('404')) {
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['/welcome']);
         return;
       }
 
       // Also check for HTTP errors
       if (e?.status && e.status >= 400) {
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['/welcome']);
         return;
       }
     } finally {

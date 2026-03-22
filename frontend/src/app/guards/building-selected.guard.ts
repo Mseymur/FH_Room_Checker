@@ -10,5 +10,5 @@ export const buildingSelectedGuard = () => {
     return true;
   }
 
-  return router.createUrlTree(['/home']);
+  return router.createUrlTree(['/welcome']);
 };
