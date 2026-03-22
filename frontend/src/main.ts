@@ -16,6 +16,9 @@ import { initializeAppCheck, ReCaptchaV3Provider, provideAppCheck } from "@angul
 
 if (environment.production) {
   enableProdMode();
+} else {
+  // Force Firebase to log the debug token locally so it can be registered in the console
+  (window as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 }
 
 bootstrapApplication(AppComponent, {
