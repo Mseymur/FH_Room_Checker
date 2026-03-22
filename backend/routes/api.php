@@ -10,10 +10,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // 1. Endpoint for Onboarding/Initialization
-Route::post('/buildings/initialize', [BuildingController::class, 'initialize']);
+Route::middleware('throttle:initialize')->post('/buildings/initialize', [BuildingController::class, 'initialize']);
 
 // 2. The App Endpoint (Filtered for "Now") - Accepts BUILDING CODE
-Route::get('/rooms/{building}/now', [RoomController::class, 'getFreeRoomsNow']);
+Route::middleware('throttle:rooms')->get('/rooms/{building}/now', [RoomController::class, 'getFreeRoomsNow']);
 
 // 3. Full Schedule Endpoint - Returns all timeslots for a date
-Route::get('/rooms/{building}/schedule', [RoomController::class, 'getSchedule']);
+Route::middleware('throttle:rooms')->get('/rooms/{building}/schedule', [RoomController::class, 'getSchedule']);
