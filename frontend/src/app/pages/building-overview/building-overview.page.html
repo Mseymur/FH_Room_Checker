@@ -133,7 +133,7 @@
 
       <!-- Room Cards: Each card represents one FREE room -->
       <div class="rooms-list">
-        <div *ngFor="let room of freeRooms" (click)="openRoomDetail(room)" class="room-card free-card tappable">
+        <div *ngFor="let room of freeRooms; trackBy: trackByRoomId" (click)="openRoomDetail(room)" class="room-card free-card tappable">
           <!-- Left side: Room ID and metadata -->
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
@@ -175,7 +175,7 @@
 
       <!-- Room Cards: Each card represents one BUSY room that will be free soon -->
       <div class="rooms-list">
-        <div *ngFor="let room of availableSoonRooms" (click)="openRoomDetail(room)"
+        <div *ngFor="let room of availableSoonRooms; trackBy: trackByRoomId" (click)="openRoomDetail(room)"
           class="room-card soon-card tappable">
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
@@ -209,7 +209,7 @@
       <!-- Room Cards: Each card represents one BUSY room -->
       <!-- Note: Only first 8 rooms shown (slice:0:8) -->
       <div *ngIf="busyRooms.length > 0" class="rooms-list">
-        <div *ngFor="let room of busyRooms | slice:0:8" (click)="openRoomDetail(room)"
+        <div *ngFor="let room of busyRooms | slice:0:8; trackBy: trackByRoomId" (click)="openRoomDetail(room)"
           class="room-card busy-card tappable">
           <div class="card-left">
             <div class="room-id" [innerHTML]="formatRoomIdWithBreaks(room.room_id)"></div>
@@ -248,10 +248,10 @@
     <div class="app-footer">
       <div class="footer-actions">
         <!-- Prominent feedback button within footer -->
-        <button class="footer-btn feedback-btn" routerLink="/feedback">
+        <a class="footer-btn feedback-btn" routerLink="/feedback">
           <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
           Give Feedback
-        </button>
+        </a>
         <a href="https://mseymur.framer.website/projects/fh-room-checker" target="_blank" class="footer-btn outline-btn">
           <ion-icon name="information-circle-outline"></ion-icon>
           Learn More

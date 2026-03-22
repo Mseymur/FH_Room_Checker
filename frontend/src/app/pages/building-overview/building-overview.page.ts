@@ -733,4 +733,8 @@ export class BuildingOverviewPage implements OnInit {
       queryParams: { date: this.selectedDate }
     });
   }
+
+  trackByRoomId(index: number, room: Room): string {
+    return room.room_id;
+  }
 }
