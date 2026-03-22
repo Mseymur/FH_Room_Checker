@@ -23,7 +23,6 @@ export const routes: Routes = [
   },
   {
     path: 'feedback',
-    canActivate: [buildingSelectedGuard],
     loadComponent: () => import('./pages/feedback/feedback.page').then(m => m.FeedbackPage)
   },
 ];
