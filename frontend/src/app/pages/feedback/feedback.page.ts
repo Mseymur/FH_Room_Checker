@@ -83,7 +83,7 @@ export class FeedbackPage {
       console.error('Error submitting feedback: ', error);
       const msg = error.message === 'Request timed out' 
         ? 'Submission timed out. Please check your connection.'
-        : 'Failed to submit feedback. Please try again later.';
+        : `Failed: ${error.message}`;
       await this.showToast(msg, 'danger');
     } finally {
       this.submitting = false;
