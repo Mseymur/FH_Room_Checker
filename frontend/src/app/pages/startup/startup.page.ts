@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { NavController, IonSpinner, IonContent } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
-import { IonSpinner, IonContent } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-startup',
@@ -16,17 +15,15 @@ import { IonSpinner, IonContent } from '@ionic/angular/standalone';
   standalone: true,
   imports: [CommonModule, IonContent, IonSpinner]
 })
-export class StartupPage implements OnInit {
-  constructor(private buildingService: BuildingService, private router: Router) {}
+export class StartupPage {
+  constructor(private buildingService: BuildingService, private navCtrl: NavController) {}
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     const selected = this.buildingService.getSelectedBuilding();
     if (selected && selected.length > 0) {
-      // Navigate straight to building overview
-      this.router.navigate(['/building-overview']);
+      this.navCtrl.navigateRoot('/building-overview', { replaceUrl: true });
     } else {
-      // No building yet — show onboarding
-      this.router.navigate(['/home']);
+      this.navCtrl.navigateRoot('/home', { replaceUrl: true });
     }
   }
 }

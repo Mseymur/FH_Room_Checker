@@ -20,8 +20,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoadingController, ToastController, IonContent, IonIcon, IonSelect, IonSelectOption, IonSpinner } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { LoadingController, ToastController, NavController, IonContent, IonIcon, IonSelect, IonSelectOption, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { informationCircleOutline, searchOutline, timeOutline, chatbubbleEllipsesOutline } from 'ionicons/icons';
 // Service import: BuildingService provides building list and API methods
@@ -48,7 +47,7 @@ export class OnboardingPage {
 
   constructor(
     private buildingService: BuildingService,
-    private router: Router,
+    private navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) {
@@ -82,7 +81,7 @@ export class OnboardingPage {
 
       // Small delay for UX
       setTimeout(() => {
-        this.router.navigate(['/building-overview']);
+        this.navCtrl.navigateRoot('/building-overview', { replaceUrl: true });
       }, 300);
 
     } catch (error: any) {
@@ -110,6 +109,6 @@ export class OnboardingPage {
   }
 
   goToFeedback() {
-    this.router.navigate(['/feedback']);
+    this.navCtrl.navigateForward('/feedback');
   }
 }
