@@ -21,7 +21,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavController, IonHeader, IonContent, IonIcon, IonSpinner, IonModal, IonDatetime, IonButton, Platform } from '@ionic/angular/standalone';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BuildingService } from 'src/app/services/building';
 import { addIcons } from 'ionicons';
@@ -89,7 +89,6 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private navCtrl: NavController,
     private buildingService: BuildingService,
     private cdr: ChangeDetectorRef,
@@ -218,13 +217,13 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
 
       // Redirect to onboarding on errors
       if (e instanceof Error && e.message.includes('404')) {
-        await this.router.navigate(['/home']);
+        await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
         return;
       }
 
       // Also check for HTTP errors
       if (e?.status && e.status >= 400) {
-        await this.router.navigate(['/home']);
+        await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
         return;
       }
     } finally {
@@ -421,6 +420,6 @@ export class RoomSchedulePage implements OnInit, OnDestroy {
   }
 
   goToFeedback() {
-    this.router.navigate(['/feedback']);
+    this.navCtrl.navigateForward('/feedback');
   }
 }

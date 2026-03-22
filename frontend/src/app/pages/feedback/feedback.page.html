@@ -48,8 +48,8 @@
       </ion-list>
 
       <div class="action-button-container">
-        <button class="action-btn" (click)="submitFeedback()" [disabled]="!feedbackObj.category || !feedbackObj.description.trim()">
-          Submit Feedback
+        <button class="action-btn" (click)="submitFeedback()" [disabled]="!feedbackObj.category || !feedbackObj.description.trim() || submitting">
+          {{ submitting ? 'Submitting...' : 'Submit Feedback' }}
         </button>
       </div>
 

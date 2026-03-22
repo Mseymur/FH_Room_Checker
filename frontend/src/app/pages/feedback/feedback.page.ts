@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { 
-  IonContent, IonHeader, 
-  IonItem, IonList, IonSelect, IonSelectOption, 
-  IonTextarea, ToastController,
+import {
+  IonContent, IonHeader,
+  IonItem, IonList, IonSelect, IonSelectOption,
+  IonTextarea, ToastController, NavController,
   IonIcon, IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -31,17 +30,19 @@ export class FeedbackPage {
     description: ''
   };
 
+  submitting = false;
+
   private firestore: Firestore = inject(Firestore);
   private auth: Auth = inject(Auth);
   private toastController = inject(ToastController);
-  private router: Router = inject(Router);
+  private navCtrl = inject(NavController);
 
   constructor() {
     addIcons({ chevronBackOutline, chatbubbleEllipsesOutline, informationCircleOutline });
   }
 
   goBack() {
-    this.router.navigate(['/building-overview']);
+    this.navCtrl.navigateBack('/building-overview');
   }
 
   async submitFeedback() {
@@ -49,6 +50,9 @@ export class FeedbackPage {
       await this.showToast('Please fill in both the category and description fields.', 'warning');
       return;
     }
+
+    if (this.submitting) return;
+    this.submitting = true;
 
     try {
       await signInAnonymously(this.auth);
@@ -61,10 +65,12 @@ export class FeedbackPage {
         timestamp: serverTimestamp()
       });
       await this.showToast('Feedback submitted successfully! Thank you.', 'success');
-      this.feedbackObj = { category: '', email: '', description: '' }; // reset form
+      this.feedbackObj = { category: '', email: '', description: '' };
     } catch (error) {
-      console.error('Error adding document: ', error);
+      console.error('Error submitting feedback: ', error);
       await this.showToast('Failed to submit feedback. Please try again later.', 'danger');
+    } finally {
+      this.submitting = false;
     }
   }
 
@@ -72,8 +78,8 @@ export class FeedbackPage {
     const toast = await this.toastController.create({
       message,
       color,
-      duration: 3000,
-      position: 'bottom'
+      duration: 3500,
+      position: 'top'
     });
     await toast.present();
   }
