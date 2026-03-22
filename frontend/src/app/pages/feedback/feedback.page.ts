@@ -7,6 +7,7 @@ import {
   IonTextarea, ToastController, NavController,
   IonIcon, IonInput
 } from '@ionic/angular/standalone';
+import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chatbubbleEllipsesOutline, informationCircleOutline } from 'ionicons/icons';
 import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
@@ -20,12 +21,14 @@ import { Auth, signInAnonymously } from '@angular/fire/auth';
   imports: [
     IonContent, IonHeader, 
     IonItem, IonList, IonSelect, IonSelectOption, 
-    IonTextarea, CommonModule, FormsModule, IonIcon, IonInput
+    IonTextarea, CommonModule, FormsModule, IonIcon, IonInput,
+    RouterModule
   ]
 })
 export class FeedbackPage {
   feedbackObj = {
     category: '',
+    name: '',
     email: '',
     description: ''
   };
@@ -41,13 +44,13 @@ export class FeedbackPage {
     addIcons({ chevronBackOutline, chatbubbleEllipsesOutline, informationCircleOutline });
   }
 
-  goBack() {
-    this.navCtrl.navigateBack('/building-overview');
-  }
-
   async submitFeedback() {
-    if (!this.feedbackObj.category || !this.feedbackObj.description.trim()) {
-      await this.showToast('Please fill in both the category and description fields.', 'warning');
+    if (!this.feedbackObj.category) {
+      await this.showToast('Please select a category.', 'warning');
+      return;
+    }
+    if (!this.feedbackObj.description || !this.feedbackObj.description.trim()) {
+      await this.showToast('Please enter a description.', 'warning');
       return;
     }
 
@@ -55,20 +58,33 @@ export class FeedbackPage {
     this.submitting = true;
 
     try {
-      await signInAnonymously(this.auth);
+      // Create a timeout promise to prevent silent hangs (e.g., from AppCheck restrictions)
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timed out')), 10000)
+      );
 
-      const fbCollection = collection(this.firestore, 'user_feedback');
-      await addDoc(fbCollection, {
-        category: this.feedbackObj.category,
-        email: this.feedbackObj.email || null,
-        description: this.feedbackObj.description,
-        timestamp: serverTimestamp()
-      });
+      const submitTask = async () => {
+        await signInAnonymously(this.auth);
+        const fbCollection = collection(this.firestore, 'user_feedback');
+        await addDoc(fbCollection, {
+          category: this.feedbackObj.category,
+          name: this.feedbackObj.name || null,
+          email: this.feedbackObj.email || null,
+          description: this.feedbackObj.description,
+          timestamp: serverTimestamp()
+        });
+      };
+
+      await Promise.race([submitTask(), timeoutPromise]);
+
       await this.showToast('Feedback submitted successfully! Thank you.', 'success');
-      this.feedbackObj = { category: '', email: '', description: '' };
-    } catch (error) {
+      this.feedbackObj = { category: '', name: '', email: '', description: '' };
+    } catch (error: any) {
       console.error('Error submitting feedback: ', error);
-      await this.showToast('Failed to submit feedback. Please try again later.', 'danger');
+      const msg = error.message === 'Request timed out' 
+        ? 'Submission timed out. Please check your connection.'
+        : 'Failed to submit feedback. Please try again later.';
+      await this.showToast(msg, 'danger');
     } finally {
       this.submitting = false;
     }

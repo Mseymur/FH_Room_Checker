@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <div class="header-wrapper">
     <div class="header-top">
-      <button class="back-btn" (click)="goBack()">
+      <button class="back-btn" routerLink="/building-overview">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </button>
       <div class="header-center">
@@ -32,6 +32,10 @@
         </ion-item>
 
         <ion-item class="custom-item" lines="none">
+          <ion-input type="text" label="Name (Optional)" label-placement="stacked" [(ngModel)]="feedbackObj.name" placeholder="Your name"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-item" lines="none">
           <ion-input type="email" label="Email Address (Optional)" label-placement="stacked" [(ngModel)]="feedbackObj.email" placeholder="So we can follow up with you"></ion-input>
         </ion-item>
 
@@ -48,7 +52,7 @@
       </ion-list>
 
       <div class="action-button-container">
-        <button class="action-btn" (click)="submitFeedback()" [disabled]="!feedbackObj.category || !feedbackObj.description.trim() || submitting">
+        <button class="action-btn" (click)="submitFeedback()" [disabled]="submitting">
           {{ submitting ? 'Submitting...' : 'Submit Feedback' }}
         </button>
       </div>

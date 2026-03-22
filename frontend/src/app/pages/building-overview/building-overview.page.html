@@ -84,7 +84,7 @@
   </div>
 </ion-header>
 
-<ion-content class="main-content">
+<ion-content class="main-content" [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="loadData($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -248,7 +248,7 @@
     <div class="app-footer">
       <div class="footer-actions">
         <!-- Prominent feedback button within footer -->
-        <button class="footer-btn feedback-btn" (click)="goToFeedback()">
+        <button class="footer-btn feedback-btn" routerLink="/feedback">
           <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
           Give Feedback
         </button>

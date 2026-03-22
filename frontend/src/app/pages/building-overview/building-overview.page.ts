@@ -733,8 +733,4 @@ export class BuildingOverviewPage implements OnInit {
       queryParams: { date: this.selectedDate }
     });
   }
-
-  goToFeedback() {
-    this.navCtrl.navigateForward('/feedback');
-  }
 }
