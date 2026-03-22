@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'api_url' => env('FHJ_API_URL', 'https://cis.fh-joanneum.at/img/zimmer_plan.php'),
     
     'default_building' => env('DEFAULT_BUILDING', 'AP152'),
     
