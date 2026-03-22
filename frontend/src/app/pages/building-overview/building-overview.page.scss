@@ -252,7 +252,7 @@ ion-datetime-button {
 
 .content-area {
   padding: 1rem;
-  padding-bottom: 3rem;
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom));
 }
 
 // States
@@ -757,7 +757,7 @@ ion-modal.datetime-modal {
 .app-footer {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(0,0,0,0.06);
   text-align: center;
   

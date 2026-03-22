@@ -24,10 +24,10 @@ import {
   IonHeader, IonContent, IonRefresher, IonRefresherContent,
   IonSpinner, IonIcon, IonButton, IonSearchbar,
   IonSelect, IonSelectOption, IonModal, IonDatetime,
-  ModalController, ToastController, Platform
+  ModalController, ToastController, Platform, NavController
 } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
@@ -150,7 +150,7 @@ export class BuildingOverviewPage implements OnInit {
     public buildingService: BuildingService,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
-    private router: Router,
+    private navCtrl: NavController,
     private platform: Platform
   ) {
     addIcons({
@@ -327,7 +327,7 @@ export class BuildingOverviewPage implements OnInit {
         this.error = `Server Error: ${e.status} - ${e.statusText}`;
         // Redirect to onboarding on server errors (4xx, 5xx)
         if (e.status >= 400) {
-          await this.router.navigate(['/home']);
+          await this.navCtrl.navigateRoot('/home', { replaceUrl: true });
           return;
         }
       } else {
@@ -716,7 +716,7 @@ export class BuildingOverviewPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/home']);
+    this.navCtrl.navigateRoot('/home', { replaceUrl: true });
   }
 
 
@@ -729,15 +729,12 @@ export class BuildingOverviewPage implements OnInit {
    * @param room - The room object to view schedule for
    */
   openRoomDetail(room: Room) {
-    // Pass the selected date to the room schedule page (maintains date context)
-    this.router.navigate(['/room-schedule', this.buildingName, room.room_id], {
-      queryParams: {
-        date: this.selectedDate
-      }
+    this.navCtrl.navigateForward(['/room-schedule', this.buildingName, room.room_id], {
+      queryParams: { date: this.selectedDate }
     });
   }
 
   goToFeedback() {
-    this.router.navigate(['/feedback']);
+    this.navCtrl.navigateForward('/feedback');
   }
 }

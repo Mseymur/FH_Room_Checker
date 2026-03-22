@@ -25,4 +25,8 @@ export const routes: Routes = [
     canActivate: [buildingSelectedGuard],
     loadComponent: () => import('./pages/feedback/feedback.page').then( m => m.FeedbackPage)
   },
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];
