@@ -1,0 +1,244 @@
+.schedule-header {
+  background: linear-gradient(135deg, #D6001C 0%, #B00017 100%);
+  padding: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(214, 0, 28, 0.2);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  padding: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  ion-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.header-info {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+
+  .room-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0;
+    color: white;
+  }
+
+  .room-subtitle {
+    font-size: 0.85rem;
+    margin: 0.15rem 0 0;
+    opacity: 0.85;
+    color: white;
+  }
+}
+
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    ion-icon {
+      font-size: 1.15rem;
+    }
+  }
+
+  .date-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: white;
+    font-size: 0.9375rem;
+
+    ion-icon {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+.schedule-container {
+  padding: 1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+
+  ion-icon {
+    font-size: 3rem;
+    color: #ced4da;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #495057;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: #868e96;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.schedule-card {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #e9ecef;
+
+  .time-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-right: 1px solid #e9ecef;
+    min-width: 85px;
+
+    span {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #495057;
+    }
+
+    .time-line {
+      flex: 1;
+      width: 2px;
+      background: #dee2e6;
+      margin: 0.5rem 0;
+      border-radius: 1px;
+    }
+  }
+
+  .info-column {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .class-name {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #212529;
+      line-height: 1.3;
+    }
+
+    .room-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      color: #d6001c;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+      background: rgba(214, 0, 28, 0.08);
+      border-radius: 16px;
+      width: fit-content;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba(214, 0, 28, 0.15);
+      }
+    }
+  }
+}
+
+.action-footer {
+  padding: 1.5rem;
+  text-align: center;
+  
+  .email-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #495057;
+    background: white;
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1.5rem;
+    border-radius: 24px;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f8f9fa;
+      transform: translateY(-1px);
+    }
+    
+    ion-icon {
+      font-size: 1.125rem;
+    }
+  }
+}

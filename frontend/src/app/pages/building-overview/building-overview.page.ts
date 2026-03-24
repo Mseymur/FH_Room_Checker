@@ -24,7 +24,8 @@ import {
   IonHeader, IonContent, IonRefresher, IonRefresherContent,
   IonSpinner, IonIcon, IonButton, IonSearchbar,
   IonSelect, IonSelectOption, IonModal, IonDatetime,
-  ModalController, ToastController, Platform, NavController
+  ModalController, ToastController, Platform, NavController,
+  IonList, IonListHeader, IonItem, IonLabel, IonNote
 } from '@ionic/angular/standalone';
 import { BuildingService } from 'src/app/services/building';
 import { RouterModule } from '@angular/router';
@@ -34,8 +35,10 @@ import { addIcons } from 'ionicons';
 import {
   calendarClearOutline, searchOutline, alertCircle,
   checkmarkCircle, chevronForward, informationCircleOutline,
-  timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline, chatbubbleEllipsesOutline
+  timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline, chatbubbleEllipsesOutline,
+  personCircleOutline, businessOutline
 } from 'ionicons/icons';
+import { TeacherScheduleModalComponent } from 'src/app/components/teacher-schedule-modal/teacher-schedule.modal';
 
 /**
  * Room Data Model
@@ -76,7 +79,8 @@ interface Room {
     CommonModule, RouterModule, FormsModule,
     IonHeader, IonContent, IonRefresher, IonRefresherContent,
     IonSpinner, IonIcon, IonButton, IonSearchbar,
-    IonSelect, IonSelectOption, IonModal, IonDatetime
+    IonSelect, IonSelectOption, IonModal, IonDatetime,
+    IonList, IonListHeader, IonItem, IonLabel, IonNote
   ]
 })
 export class BuildingOverviewPage implements OnInit {
@@ -101,6 +105,11 @@ export class BuildingOverviewPage implements OnInit {
 
   // Filtered results (after search/floor filters are applied)
   filteredRooms: Room[] = [];
+
+  // ========== TEACHER SEARCH ==========
+  allTeachers: string[] = []; // Current building teachers
+  globalTeachers: string[] = []; // ALL building teachers
+  filteredTeachers: string[] = [];
 
   // ========== UI STATE ==========
   loading = true; // Loading indicator state
@@ -157,7 +166,7 @@ export class BuildingOverviewPage implements OnInit {
       calendarClearOutline, searchOutline, alertCircle,
       checkmarkCircle, chevronForward, informationCircleOutline,
       timeOutline, lockClosed, checkmarkCircleOutline, calendarOutline,
-      chatbubbleEllipsesOutline
+      chatbubbleEllipsesOutline, personCircleOutline, businessOutline
     });
   }
 
@@ -175,6 +184,9 @@ export class BuildingOverviewPage implements OnInit {
   async ngOnInit() {
     this.selectedBuilding = this.buildingService.getSelectedBuilding();
     this.buildingName = this.selectedBuilding;
+    
+    // Initial load of known teachers from persistent store
+    this.globalTeachers = this.buildingService.getAllKnownTeachers();
 
     // Track when app goes to background
     this.platform.pause.subscribe(() => {
@@ -320,7 +332,7 @@ export class BuildingOverviewPage implements OnInit {
       this.applyFilters();
 
       this.lastUpdated = new Date();
-
+      this.loadGlobalTeacherIndex();
     } catch (e: any) {
       console.error('Error loading data:', e);
       if (e instanceof HttpErrorResponse) {
@@ -429,6 +441,15 @@ export class BuildingOverviewPage implements OnInit {
       const bEnd = new Date(b.end).getTime();
       return aEnd - bEnd;
     });
+
+    // ========== EXTRACT TEACHERS ==========
+    const teacherSet = new Set<string>();
+    this.fullSchedule.forEach(slot => {
+      if (slot.teacher && slot.teacher !== 'Unknown' && slot.teacher.trim().length > 0) {
+        teacherSet.add(slot.teacher.trim());
+      }
+    });
+    this.allTeachers = Array.from(teacherSet).sort();
   }
 
   private updateStats() {
@@ -492,6 +513,14 @@ export class BuildingOverviewPage implements OnInit {
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase().trim();
 
+      // Find matching teachers globally
+      this.filteredTeachers = this.globalTeachers.filter(t => t.toLowerCase().includes(query));
+      
+      // If we haven't loaded global index yet, fallback to current building only
+      if (this.filteredTeachers.length === 0) {
+        this.filteredTeachers = this.allTeachers.filter(t => t.toLowerCase().includes(query));
+      }
+
       // Track which rooms match the search query
       const matchingRoomIds = new Set<string>();
       // Store match descriptions (e.g., "Matches: Database Systems")
@@ -537,6 +566,7 @@ export class BuildingOverviewPage implements OnInit {
         }
       });
     } else {
+      this.filteredTeachers = [];
       // Clear match info when search is cleared
       filtered.forEach(room => room.matchedClass = undefined);
     }
@@ -740,5 +770,67 @@ export class BuildingOverviewPage implements OnInit {
 
   trackByRoomId(index: number, room: Room): string {
     return room.room_id;
+  }
+
+  /**
+   * Background fetch for all buildings to extract global teacher list
+   * Fetches Today and Tomorrow to build a reliable index.
+   */
+  private async loadGlobalTeacherIndex() {
+    try {
+      const allBuildings = this.buildingService.buildings;
+      const tzOffset = new Date().getTimezoneOffset() * 60000;
+      
+      const today = new Date(Date.now() - tzOffset).toISOString().split('T')[0];
+      const tomorrow = new Date(Date.now() - tzOffset + 86400000).toISOString().split('T')[0];
+
+      // Fetch Today and Tomorrow for ALL buildings (20 requests total)
+      const dayPromises = [today, tomorrow].map(date => 
+        Promise.all(allBuildings.map(b => this.buildingService.getSchedule(b.code, date).catch((): any => null)))
+      );
+      
+      const [todayResponses, tomorrowResponses] = await Promise.all(dayPromises);
+      const allResponses = [...todayResponses, ...tomorrowResponses];
+
+      const teacherSet = new Set<string>();
+      allResponses.forEach(res => {
+        if (res && res.data) {
+          res.data.forEach((slot: any) => {
+            if (slot.teacher && slot.teacher !== 'Unknown' && slot.teacher.trim().length > 0) {
+              teacherSet.add(slot.teacher.trim());
+            }
+          });
+        }
+      });
+      
+      // Persist these teachers globally
+      this.buildingService.addTeachers(Array.from(teacherSet));
+      
+      // Update local dropdown list from the global store
+      this.globalTeachers = this.buildingService.getAllKnownTeachers();
+    } catch (e) {
+      console.error('Failed to index global teachers', e);
+    }
+  }
+
+  async openTeacherSchedule(teacherName: string) {
+    const modal = await this.modalCtrl.create({
+      component: TeacherScheduleModalComponent,
+      componentProps: {
+        teacherName,
+        buildingCode: this.buildingName,
+        todaySchedules: this.fullSchedule
+      },
+      breakpoints: [0, 0.75, 1],
+      initialBreakpoint: 0.75,
+      handle: false
+    });
+    
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data && data.navigateToRoom) {
+      this.navCtrl.navigateForward(`/room-schedule/${this.buildingName}/${data.navigateToRoom}`);
+    }
   }
 }

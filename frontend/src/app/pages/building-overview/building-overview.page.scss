@@ -840,3 +840,66 @@ ion-modal.datetime-modal {
     }
   }
 }
+
+/* ========== UNIFIED SEARCH LIST ========== */
+.search-results-overlay {
+  background: #f8f9fa;
+  min-height: calc(100vh - 120px);
+  padding: 1rem;
+
+  .search-list {
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .search-header {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #212529;
+    background: transparent;
+    padding-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
+  }
+
+  .search-item {
+    --background: white;
+    --color: #212529;
+    --padding-start: 1rem;
+    --inner-padding-end: 1rem;
+    --border-color: #f1f3f5;
+    --border-radius: 12px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    color: #212529 !important;
+
+    ion-label h3 {
+      color: #212529 !important;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+    }
+
+    ion-label p {
+      color: #6c757d !important;
+      font-size: 0.85rem;
+    }
+    
+    ion-note {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.animation-fade-in {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

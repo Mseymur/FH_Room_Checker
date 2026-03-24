@@ -40,12 +40,52 @@ export class BuildingService {
     { code: 'ES7b', label: 'Eggenberger Straße 7b' },
   ];
 
-  // ========== SELECTED BUILDING STATE ==========
-  // Stores the currently selected building code (persists across navigation)
+  // Persistent set of all teachers ever found in any building schedule
+  private knownTeachers: Set<string> = new Set();
   private selectedBuildingCode: string = '';
 
   constructor(private http: HttpClient) {
-    this.selectedBuildingCode = localStorage.getItem('selectedBuildingCode');
+    this.selectedBuildingCode = localStorage.getItem('selectedBuildingCode') || '';
+    this.loadKnownTeachers();
+  }
+
+  /**
+   * Load known teachers from local storage
+   */
+  private loadKnownTeachers() {
+    const stored = localStorage.getItem('allKnownTeachers');
+    if (stored) {
+      try {
+        const list = JSON.parse(stored);
+        this.knownTeachers = new Set(list);
+      } catch (e) {
+        console.error('Failed to parse known teachers', e);
+      }
+    }
+  }
+
+  /**
+   * Save a list of teachers to the persistent store
+   */
+  public addTeachers(teachers: string[]) {
+    let changed = false;
+    teachers.forEach(t => {
+      if (t && t !== 'Unknown' && !this.knownTeachers.has(t)) {
+        this.knownTeachers.add(t);
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      localStorage.setItem('allKnownTeachers', JSON.stringify(Array.from(this.knownTeachers)));
+    }
+  }
+
+  /**
+   * Get all unique teachers known to the system
+   */
+  public getAllKnownTeachers(): string[] {
+    return Array.from(this.knownTeachers).sort();
   }
 
   /**

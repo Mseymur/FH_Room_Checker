@@ -109,6 +109,42 @@
     </div>
     }
 
+    <!-- Search Results View (Only visible when searching) -->
+    <div *ngIf="searchQuery.trim().length > 0 && !loading" class="search-results-overlay animation-fade-in">
+      <ion-list class="search-list" lines="full">
+        <ion-list-header *ngIf="filteredRooms.length > 0" class="search-header">Rooms</ion-list-header>
+        <ion-item *ngFor="let room of filteredRooms | slice:0:15; trackBy: trackByRoomId" (click)="openRoomDetail(room)" button class="search-item" detail="true">
+          <ion-icon name="business-outline" slot="start" color="medium"></ion-icon>
+          <ion-label>
+            <h3>{{ room.room_id }}</h3>
+            <p *ngIf="room.matchedClass">{{ room.matchedClass }}</p>
+          </ion-label>
+          <ion-note slot="end" [color]="room.status === 'FREE' ? 'success' : 'danger'">
+            {{ room.status === 'FREE' ? 'Free' : 'Busy' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-list-header *ngIf="filteredTeachers.length > 0" class="search-header">Teachers</ion-list-header>
+        <ion-item *ngFor="let teacher of filteredTeachers | slice:0:10" (click)="openTeacherSchedule(teacher)" button class="search-item" detail="true">
+          <div class="teacher-avatar" slot="start">
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </div>
+          <ion-label>
+            <h3>{{ teacher }}</h3>
+            <p>Faculty & Lecturer</p>
+          </ion-label>
+        </ion-item>
+
+        <div *ngIf="filteredRooms.length === 0 && filteredTeachers.length === 0" class="state-container empty-search">
+          <ion-icon name="search-outline" class="state-icon"></ion-icon>
+          <h3 class="state-title">No matches found</h3>
+          <p class="state-text">No rooms or teachers match "{{ searchQuery }}"</p>
+        </div>
+      </ion-list>
+    </div>
+
+    <!-- Regular View (Hidden when searching) -->
+    <div *ngIf="searchQuery.trim().length === 0" class="standard-grid-view">
     <!-- Empty Search State -->
     @if( freeRooms.length === 0 && !loading && !error){
     <div class="state-container error-state">
@@ -242,6 +278,7 @@
       <h3 class="state-title">No Rooms Available</h3>
       <p class="state-text">No rooms scheduled for this building right now</p>
       <button (click)="loadData()" class="action-btn">Refresh</button>
+    </div>
     </div>
 
     <!-- Unified Footer -->

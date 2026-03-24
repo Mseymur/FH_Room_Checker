@@ -1,0 +1,65 @@
+<ion-header class="ion-no-border">
+  <div class="schedule-header">
+    <div class="header-top">
+      <button class="back-btn" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="header-info">
+        <h1 class="room-title">{{ teacherName }}</h1>
+        <p class="room-subtitle">Faculty | FH Joanneum</p>
+      </div>
+    </div>
+
+    <div class="date-navigator">
+      <button class="nav-btn" (click)="previousDay()">
+        <ion-icon name="chevron-back"></ion-icon>
+      </button>
+      <div class="date-label">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ dateLabel }}</span>
+      </div>
+      <button class="nav-btn" (click)="nextDay()">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="modal-content">
+
+  <div class="schedule-container">
+    <div *ngIf="loading" class="loading-state">
+      <p>Loading global schedule...</p>
+    </div>
+
+    <div *ngIf="!loading && displaySchedules.length === 0" class="empty-state">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h3>No classes scheduled</h3>
+      <p>Prof. {{ teacherName }} has no classes on {{ dateLabel }}.</p>
+    </div>
+
+    <div *ngIf="!loading && displaySchedules.length > 0" class="schedule-list">
+      <div *ngFor="let slot of displaySchedules" class="schedule-card">
+        <div class="time-column">
+          <span class="time-start">{{ formatTime(slot.start) }}</span>
+          <div class="time-line"></div>
+          <span class="time-end">{{ formatTime(slot.end) }}</span>
+        </div>
+        <div class="info-column">
+          <h4 class="class-name">{{ slot.className || slot.title || 'Ongoing Class' }}</h4>
+          <div class="room-link" (click)="openRoomSchedule(slot.room_id, slot.building)">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>Room {{ slot.room_id }} ({{ slot.building }})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-footer">
+    <a [href]="'mailto:?subject=Question regarding class&body=Dear Prof. ' + teacherName" class="email-btn outline-btn">
+      <ion-icon name="mail-outline"></ion-icon>
+      Email Teacher
+    </a>
+  </div>
+</ion-content>
