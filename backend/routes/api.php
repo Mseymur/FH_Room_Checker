@@ -17,3 +17,9 @@ Route::middleware('throttle:rooms')->get('/rooms/{building}/now', [RoomControlle
 
 // 3. Full Schedule Endpoint - Returns all timeslots for a date
 Route::middleware('throttle:rooms')->get('/rooms/{building}/schedule', [RoomController::class, 'getSchedule']);
+
+// 4. Diagnostic endpoint - shows when each building's data was last synced
+Route::get('/status', [BuildingController::class, 'status']);
+
+// 5. Force sync endpoint - triggers a full re-fetch for all buildings (protected by secret key)
+Route::get('/sync', [BuildingController::class, 'forceSync']);
