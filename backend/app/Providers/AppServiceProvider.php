@@ -22,8 +22,13 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Standard limit for read-only room endpoints
+        // Rate limit public room reads by the forwarded client identity instead of the proxy host.
         RateLimiter::for('rooms', function (Request $request) {
-            return Limit::perMinute(60)->by($request->ip());
+            $clientIp = $request->header('X-Client-IP');
+            $userAgent = substr((string) $request->userAgent(), 0, 120);
+            $rateLimitKey = $clientIp ?: $request->ip();
+
+            return Limit::perMinute(45)->by($rateLimitKey.'|'.$userAgent);
         });
     }
 }
