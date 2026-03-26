@@ -37,7 +37,6 @@ function setCacheHeaders(res, view) {
 
   res.setHeader('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=40');
 }
-const BUILDING_PATTERN = /^[A-Za-z0-9]+$/;
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -48,7 +47,6 @@ module.exports = async function handler(req, res) {
   const backendBaseUrl = (process.env.BACKEND_API_URL || '').replace(/\/+$/, '');
   const internalSecret = process.env.INTERNAL_API_SECRET || '';
   const { building, view, date, time, ...unexpectedParams } = req.query;
-  const { building, view } = req.query;
 
   if (!backendBaseUrl || !internalSecret) {
     return res.status(500).json({ error: 'Proxy is not configured' });
@@ -57,6 +55,7 @@ module.exports = async function handler(req, res) {
   if (typeof building !== 'string' || !BUILDING_PATTERN.test(building)) {
     return res.status(400).json({ error: 'Invalid building code' });
   }
+
   const normalizedBuilding = building.toUpperCase();
   if (!ALLOWED_BUILDINGS.has(normalizedBuilding)) {
     return res.status(404).json({ error: 'Building not supported' });
@@ -95,33 +94,12 @@ module.exports = async function handler(req, res) {
   try {
     setCacheHeaders(res, view);
 
-  const upstreamUrl = new URL(`${backendBaseUrl}/rooms/${building}/${view}`);
-
-  for (const [key, value] of Object.entries(req.query)) {
-    if (key === 'building' || key === 'view' || value == null) {
-      continue;
-    }
-
-    if (Array.isArray(value)) {
-      for (const item of value) {
-        upstreamUrl.searchParams.append(key, item);
-      }
-      continue;
-    }
-
-    upstreamUrl.searchParams.set(key, value);
-  }
-
-  try {
-
     const upstream = await fetch(upstreamUrl, {
       headers: {
         'Accept': 'application/json',
         'X-Internal-Api-Secret': internalSecret,
-
         'X-Client-IP': getClientIp(req),
         'X-Forwarded-User-Agent': req.headers['user-agent'] || '',
-
       },
     });
 
