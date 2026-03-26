@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
 import { App } from '@capacitor/app';
+
+import { AnalyticsService } from './services/analytics.service';
+import { ConsentService } from './services/consent.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet],
+  styleUrl: 'app.component.scss',
+  imports: [CommonModule, IonApp, IonRouterOutlet],
 })
 export class AppComponent {
+  readonly consentService = inject(ConsentService);
+  readonly analyticsService = inject(AnalyticsService);
+  readonly preferencesOpen = signal(!this.consentService.hasAnswered());
+  readonly showConsentBanner = computed(() => this.preferencesOpen());
+
   private backgroundAt = 0;
 
   constructor(private platform: Platform) {
@@ -60,5 +70,25 @@ export class AppComponent {
         }
       });
     });
+  }
+
+  allowNecessaryOnly(): void {
+    this.consentService.allowNecessaryOnly();
+    this.preferencesOpen.set(false);
+  }
+
+  acceptAnalytics(): void {
+    this.consentService.acceptAnalytics();
+    this.preferencesOpen.set(false);
+  }
+
+  openPreferences(): void {
+    this.preferencesOpen.set(true);
+  }
+
+  closePreferences(): void {
+    if (this.consentService.hasAnswered()) {
+      this.preferencesOpen.set(false);
+    }
   }
 }
