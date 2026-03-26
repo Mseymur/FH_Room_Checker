@@ -32,7 +32,8 @@ class BuildingController extends Controller
 
         return response()->json([
             'status' => 'synced',
-            'raw_content' => json_decode($building->rawData->content, true)
+            'building' => $building->code,
+            'initialized_at' => Carbon::now('Europe/Vienna')->toDateTimeString(),
         ]);
     }
 

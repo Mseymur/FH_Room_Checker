@@ -1,26 +1,23 @@
 /**
  * Onboarding Page Component
  *
- * First-time user experience: allows users to select their building
- * and initialize the building data in the backend.
+ * First-time user experience: allows users to select their building.
  *
  * Key Features:
  * - Building selection dropdown (populated from BuildingService.buildings)
- * - Initializes building data via API (creates tables, fetches schedule)
- * - Stores raw API response in sessionStorage for debugging
- * - Navigates to building overview after successful initialization
+ * - Stores the selected building locally
+ * - Navigates to building overview
  *
  * Data Flow:
  * 1. User selects building from dropdown
- * 2. Calls BuildingService.initializeBuilding() (POST /api/buildings/initialize)
- * 3. Backend creates tables and fetches initial data if needed
- * 4. On success: stores building code, saves raw data, navigates to overview
+ * 2. App stores the selected building code locally
+ * 3. App navigates to the building overview page
  */
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoadingController, ToastController, NavController, IonContent, IonIcon, IonSelect, IonSelectOption, IonSpinner } from '@ionic/angular/standalone';
+import { NavController, IonContent, IonIcon, IonSelect, IonSelectOption, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { informationCircleOutline, searchOutline, timeOutline, chatbubbleEllipsesOutline } from 'ionicons/icons';
 // Service import: BuildingService provides building list and API methods
@@ -41,67 +38,32 @@ export class WelcomePage {
   // ========== UI STATE ==========
   loading: boolean = false; // Loading indicator during initialization
 
-  // ========== STORAGE ==========
-  // Key for storing raw API response in sessionStorage (for debugging)
-  private RAW_DATA_KEY = 'building_raw_data';
-
   constructor(
     private buildingService: BuildingService,
     private navCtrl: NavController,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
   ) {
     addIcons({ informationCircleOutline, searchOutline, timeOutline, chatbubbleEllipsesOutline });
   }
 
   /**
-   * Initialize building and navigate to overview
+   * Save the selected building and navigate to the overview
    *
    * This method:
-   * 1. Calls the backend API to initialize the building (create tables, fetch data)
-   * 2. Stores the raw API response in sessionStorage (for debugging)
-   * 3. Sets the selected building in BuildingService
-   * 4. Navigates to the building overview page
-   *
-   * API Endpoint: POST /api/buildings/initialize
+   * 1. Stores the selected building in BuildingService
+   * 2. Navigates to the building overview page
    */
   async onNext() {
     if (!this.selectedBuilding || this.loading) return;
 
     this.loading = true;
 
-    try {
-      // Call backend to initialize building (creates tables, fetches schedule if needed)
-      const response = await this.buildingService.initializeBuilding(this.selectedBuilding);
+    this.buildingService.setSelectedBuilding(this.selectedBuilding);
 
+    // Small delay for UX
+    setTimeout(() => {
       this.loading = false;
-
-      // Store raw API response in sessionStorage (for debugging/inspection)
-      sessionStorage.setItem(this.RAW_DATA_KEY, JSON.stringify(response.raw_content, null, 2));
-
-      // Small delay for UX
-      setTimeout(() => {
-        this.navCtrl.navigateRoot('/', { replaceUrl: true });
-      }, 300);
-
-    } catch (error: any) {
-      this.loading = false;
-      console.error(error);
-
-      const toast = await this.toastCtrl.create({
-        message: error.error?.message || 'Sync failed. Please check your connection and try again.',
-        duration: 4000,
-        color: 'danger',
-        position: 'top',
-        buttons: [
-          {
-            text: 'Retry',
-            handler: () => this.onNext()
-          }
-        ]
-      });
-      toast.present();
-    }
+      this.navCtrl.navigateRoot('/', { replaceUrl: true });
+    }, 300);
   }
 
   protected selectBuilding(buildingCode: string) {

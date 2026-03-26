@@ -79,7 +79,8 @@ The project has evolved from a prototype into a robust full-stack solution.
     npm install
     ```
 3.  Configure environment:
-    *   Check `src/environments/environment.ts` and ensure `apiBaseUrl` points to your backend (default logic may vary).
+    *   In production, the frontend should use same-origin `/api` routes on Vercel.
+    *   Set `BACKEND_API_URL` and `INTERNAL_API_SECRET` in Vercel so the server-side proxy can reach Laravel.
 4.  Start the development server:
     ```bash
     npm run start
@@ -141,9 +142,8 @@ npx cap open android  # For Android (requires Android Studio)
 
 ## 🔌 API Documentation
 
-Key endpoints defined in `routes/api.php`:
+Key public endpoints defined in `routes/api.php`:
 
-*   `POST /buildings/initialize`: Initialize building data.
 *   `GET /rooms/{building}/now`: Get a list of rooms currently free in a specific building.
 *   `GET /rooms/{building}/schedule`: Get the full schedule for a building's rooms.
 

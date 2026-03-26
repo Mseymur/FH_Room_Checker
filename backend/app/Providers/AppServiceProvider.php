@@ -16,12 +16,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Strict limit for the initialize endpoint — triggers an external university API call
-        RateLimiter::for('initialize', function (Request $request) {
-            return Limit::perMinute(10)->by($request->ip());
-        });
-
-        // Standard limit for read-only room endpoints
+        // Standard limit for public read-only room endpoints
         RateLimiter::for('rooms', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
