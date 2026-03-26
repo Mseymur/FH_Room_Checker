@@ -18,9 +18,14 @@ export class AppComponent {
   readonly preferencesOpen = signal(!this.consentService.hasAnswered());
   readonly showConsentBanner = computed(() => this.preferencesOpen());
 
+  private readonly openPrivacySettingsHandler = () => {
+    this.openPreferences();
+  };
+
   private backgroundAt = 0;
 
   constructor(private platform: Platform) {
+    window.addEventListener('privacy:open-settings', this.openPrivacySettingsHandler);
     this.initialize();
   }
 

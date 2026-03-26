@@ -1,14 +1,6 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
 
-  <button
-    *ngIf="consentService.hasAnswered()"
-    class="privacy-trigger"
-    type="button"
-    (click)="openPreferences()">
-    Cookie Settings
-  </button>
-
   <div
     *ngIf="showConsentBanner()"
     class="consent-backdrop"
@@ -26,7 +18,7 @@
     <div class="consent-header">
       <div>
         <p class="consent-kicker">Privacy Preferences</p>
-        <h2 id="consent-title">Help us improve FH Room Checker</h2>
+        <h2 id="consent-title">Keep FH Room Checker fast and useful</h2>
       </div>
       <button
         *ngIf="consentService.hasAnswered()"
@@ -38,10 +30,16 @@
       </button>
     </div>
 
+    <div class="consent-pills">
+      <span class="consent-pill strong">Necessary always on</span>
+      <span class="consent-pill">No advertising cookies</span>
+      <span class="consent-pill">You can change this later</span>
+    </div>
+
     <p class="consent-copy">
       We use necessary cookies and similar local storage to keep the app running, remember your selected building,
       and protect services like feedback and abuse checks. If you allow analytics, we also load Google Analytics and
-      performance insights to understand app usage and improve speed. We do not use advertising cookies.
+      performance insights to understand which pages are used most, where searches slow down, and what should be improved next.
     </p>
 
     <div class="consent-grid">
@@ -54,12 +52,12 @@
       <article class="consent-card analytics">
         <p class="consent-card-label">Optional</p>
         <h3>Analytics</h3>
-        <p>Usage and speed measurements that help us improve searches, fix issues, and understand demand.</p>
+        <p>Usage and speed measurements that help us improve room discovery, reduce slow pages, and fix issues faster.</p>
       </article>
     </div>
 
-    <p class="consent-note" *ngIf="consentService.hasAnswered()">
-      Updated preferences apply immediately for future tracking. Already loaded analytics scripts may fully stop after the next refresh.
+    <p class="consent-note">
+      Your choice is saved on this device. You can reopen Privacy Settings from the footer at any time.
     </p>
 
     <div class="consent-actions">

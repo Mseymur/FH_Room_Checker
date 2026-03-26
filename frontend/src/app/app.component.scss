@@ -1,20 +1,3 @@
-.privacy-trigger {
-  position: fixed;
-  left: 1rem;
-  bottom: calc(1rem + env(safe-area-inset-bottom));
-  z-index: 1000;
-  border: 1px solid rgba(214, 0, 28, 0.15);
-  background: rgba(255, 255, 255, 0.96);
-  color: #5d1319;
-  border-radius: 999px;
-  padding: 0.7rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  box-shadow: 0 10px 30px rgba(18, 25, 38, 0.08);
-  backdrop-filter: blur(12px);
-}
-
 .consent-backdrop {
   position: fixed;
   inset: 0;
@@ -92,6 +75,30 @@
   color: #4a5567;
   line-height: 1.6;
   font-size: 0.94rem;
+}
+
+.consent-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0 1.35rem 0.85rem;
+}
+
+.consent-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(23, 28, 40, 0.05);
+  color: #566074;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.consent-pill.strong {
+  background: rgba(214, 0, 28, 0.08);
+  color: #8d0013;
 }
 
 .consent-grid {
@@ -188,14 +195,7 @@ button {
   }
 
   .consent-close,
-  .consent-btn,
-  .privacy-trigger {
+  .consent-btn {
     width: 100%;
-  }
-
-  .privacy-trigger {
-    left: 0.75rem;
-    right: 0.75rem;
-    bottom: calc(0.75rem + env(safe-area-inset-bottom));
   }
 }
