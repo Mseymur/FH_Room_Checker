@@ -9,7 +9,6 @@
  * - Provides methods for all building/room API endpoints
  *
  * API Endpoints Used:
- * - POST /api/buildings/initialize - Initialize building (onboarding)
  * - GET /api/rooms/{building}/now - Get current room snapshots
  * - GET /api/rooms/{building}/schedule - Get full day schedule
  */
@@ -63,29 +62,6 @@ export class BuildingService {
    */
   getSelectedBuilding(): string {
     return this.selectedBuildingCode;
-  }
-
-  /**
-   * Initialize Building (Onboarding)
-   *
-   * API: POST /api/buildings/initialize
-   *
-   * This endpoint:
-   * - Checks if building tables exist in database
-   * - If not, creates tables and fetches initial data from university API
-   * - Returns raw API response for debugging
-   *
-   * Called by: OnboardingPage.onNext()
-   *
-   * @param buildingCode - Building code (e.g., 'AP152')
-   * @returns API response containing raw_content and metadata
-   */
-  async initializeBuilding(buildingCode: string): Promise<any> {
-    const response = await lastValueFrom(
-      this.http.post<any>(`${environment.apiBaseUrl}/buildings/initialize`, { buildingCode })
-    );
-    this.setSelectedBuilding(buildingCode);
-    return response;
   }
 
   /**

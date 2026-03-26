@@ -40,13 +40,17 @@ The project includes `vercel.json` with optimized settings:
 
 ## Environment Variables
 
-The app uses the production API by default (`https://room.luigitonno.at/api`).
+The frontend should call its own same-origin `/api` routes in production.
 
-To override the API URL, add in Vercel dashboard:
-- **Variable**: `API_BASE_URL`
-- **Value**: Your API URL (e.g., `https://your-api.com/api`)
+Set these in the Vercel project:
+- `API_BASE_URL=/api`
+- `BACKEND_API_URL=https://your-laravel-domain/api`
+- `INTERNAL_API_SECRET=<same secret as Laravel>`
+- `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID`, `RECAPTCHA_SITE_KEY`
 
-Note: You'll need to update `environment.prod.ts` to use this variable if needed.
+Set these in Laravel:
+- `FRONTEND_ORIGIN=https://your-frontend-domain`
+- `INTERNAL_API_SECRET=<same secret as Vercel>`
 
 ## Build Optimization
 
@@ -70,8 +74,8 @@ The production build includes:
 - Check that `outputDirectory` is set to `www`
 
 ### API Connection Issues
-- Verify CORS is enabled on backend
-- Check API URL in `environment.prod.ts`
+- Verify `FRONTEND_ORIGIN` is correct on the Laravel side
+- Verify `BACKEND_API_URL` and `INTERNAL_API_SECRET` are set on Vercel
 - Ensure backend is accessible from Vercel's servers
 
 ## Performance
@@ -88,4 +92,3 @@ Expected build output:
 2. Add your custom domain
 3. Follow DNS configuration instructions
 4. SSL certificate is automatically provisioned
-
