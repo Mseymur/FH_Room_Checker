@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Building;
 use App\Models\RawData;
 use App\Models\Room;
@@ -61,6 +62,11 @@ class TimetableFetcher
             
             if ($existingRaw && $existingRaw->hash === $newHash) {
                 Log::info("Hash match for $buildingCode. Skipping processing.");
+                Cache::put("sync_check_{$buildingCode}", [
+                    'checked_at'  => Carbon::now('Europe/Vienna')->toDateTimeString(),
+                    'had_change'  => false,
+                    'note'        => 'Hash matched — data unchanged',
+                ], now()->addDays(30));
                 return 0;
             }
 
@@ -69,6 +75,11 @@ class TimetableFetcher
                 ['building_id' => $building->id],
                 ['content' => $rawJsonString, 'hash' => $newHash]
             );
+            Cache::put("sync_check_{$buildingCode}", [
+                'checked_at'  => Carbon::now('Europe/Vienna')->toDateTimeString(),
+                'had_change'  => true,
+                'note'        => 'Hash changed — data updated',
+            ], now()->addDays(30));
 
             $rawJson = json_decode($rawJsonString, true);
             if (!is_array($rawJson)) {

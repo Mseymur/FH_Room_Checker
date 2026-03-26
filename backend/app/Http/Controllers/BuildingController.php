@@ -9,6 +9,7 @@ use App\Models\Building;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class BuildingController extends Controller
 {
@@ -41,19 +42,35 @@ class BuildingController extends Controller
         $buildings = Building::with('rawData')->get();
 
         $data = $buildings->map(function ($building) use ($now) {
-            $lastSync = $building->rawData?->updated_at;
-            $minutesAgo = $lastSync ? $now->diffInMinutes($lastSync) : null;
+            $lastChange = $building->rawData?->updated_at;
+            $check      = Cache::get("sync_check_{$building->code}");
+
+            $lastCheckAt    = $check ? $check['checked_at'] : null;
+            $minutesSinceCheck = $lastCheckAt
+                ? $now->diffInMinutes(Carbon::parse($lastCheckAt))
+                : null;
 
             return [
-                'building' => $building->code,
-                'last_synced_at' => $lastSync?->setTimezone('Europe/Vienna')->toDateTimeString(),
-                'minutes_ago' => $minutesAgo,
-                'hours_ago' => $minutesAgo !== null ? round($minutesAgo / 60, 1) : null,
-                'status' => match(true) {
-                    $lastSync === null => 'never_synced',
-                    $minutesAgo < 130 => 'fresh',
-                    $minutesAgo < 360 => 'stale',
-                    default => 'very_stale',
+                'building'             => $building->code,
+
+                // When data last ACTUALLY CHANGED (hash was different)
+                'last_data_change_at'  => $lastChange?->setTimezone('Europe/Vienna')->toDateTimeString(),
+
+                // When the scheduler last ran and CHECKED (even if nothing changed)
+                'last_check_at'        => $lastCheckAt,
+                'minutes_since_check'  => $minutesSinceCheck,
+                'hours_since_check'    => $minutesSinceCheck !== null ? round($minutesSinceCheck / 60, 1) : null,
+
+                // What the last check found
+                'last_check_result'    => $check ? ($check['had_change'] ? 'data_changed' : 'no_change') : 'never_checked',
+                'last_check_note'      => $check['note'] ?? 'No check recorded yet',
+
+                // Overall freshness based on WHEN THE CHECK HAPPENED (not when data changed)
+                'scheduler_status' => match(true) {
+                    $minutesSinceCheck === null   => 'never_ran',
+                    $minutesSinceCheck < 130      => 'running_ok',
+                    $minutesSinceCheck < 360      => 'possibly_stuck',
+                    default                       => 'not_running',
                 },
             ];
         });
