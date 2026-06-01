@@ -1,11 +1,5 @@
 {
     "framework": "angular",
-    "crons": [
-        {
-            "path": "/api/sync",
-            "schedule": "0 6,10,14 * * *"
-        }
-    ],
     "buildCommand": "npm install --legacy-peer-deps && npm run build",
     "outputDirectory": "www",
     "rewrites": [
