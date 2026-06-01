@@ -293,5 +293,23 @@
         text-decoration-color: #d6001c;
       }
     }
+
+    .privacy-link {
+      margin-left: 0.5rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #9aa1ab;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: rgba(154, 161, 171, 0.45);
+
+      &:hover {
+        color: #666f7d;
+        text-decoration-color: rgba(102, 111, 125, 0.7);
+      }
+    }
   }
 }

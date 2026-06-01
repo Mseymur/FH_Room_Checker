@@ -1,3 +1,72 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
+
+  <div
+    *ngIf="showConsentBanner()"
+    class="consent-backdrop"
+    [class.dismissible]="consentService.hasAnswered()"
+    (click)="closePreferences()">
+  </div>
+
+  <section
+    *ngIf="showConsentBanner()"
+    class="consent-sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="consent-title">
+    <div class="consent-accent"></div>
+    <div class="consent-header">
+      <div>
+        <p class="consent-kicker">Privacy Preferences</p>
+        <h2 id="consent-title">Keep FH Room Checker fast and useful</h2>
+      </div>
+      <button
+        *ngIf="consentService.hasAnswered()"
+        class="consent-close"
+        type="button"
+        aria-label="Close cookie settings"
+        (click)="closePreferences()">
+        Close
+      </button>
+    </div>
+
+    <div class="consent-pills">
+      <span class="consent-pill strong">Necessary always on</span>
+      <span class="consent-pill">No advertising cookies</span>
+      <span class="consent-pill">You can change this later</span>
+    </div>
+
+    <p class="consent-copy">
+      We use necessary cookies and similar local storage to keep the app running, remember your selected building,
+      and protect services like feedback and abuse checks. If you allow analytics, we also load Google Analytics and
+      performance insights to understand which pages are used most, where searches slow down, and what should be improved next.
+    </p>
+
+    <div class="consent-grid">
+      <article class="consent-card">
+        <p class="consent-card-label">Always On</p>
+        <h3>Necessary</h3>
+        <p>Required for core app features, security checks, and saving your room or building preferences.</p>
+      </article>
+
+      <article class="consent-card analytics">
+        <p class="consent-card-label">Optional</p>
+        <h3>Analytics</h3>
+        <p>Usage and speed measurements that help us improve room discovery, reduce slow pages, and fix issues faster.</p>
+      </article>
+    </div>
+
+    <p class="consent-note">
+      Your choice is saved on this device. You can reopen Privacy Settings from the footer at any time.
+    </p>
+
+    <div class="consent-actions">
+      <button class="consent-btn ghost" type="button" (click)="allowNecessaryOnly()">
+        Only Necessary
+      </button>
+      <button class="consent-btn primary" type="button" (click)="acceptAnalytics()">
+        Allow Analytics
+      </button>
+    </div>
+  </section>
 </ion-app>

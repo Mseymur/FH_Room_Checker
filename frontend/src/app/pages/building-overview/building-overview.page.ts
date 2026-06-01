@@ -738,6 +738,10 @@ export class BuildingOverviewPage implements OnInit {
     this.navCtrl.navigateForward('/feedback');
   }
 
+  openPrivacySettings(): void {
+    window.dispatchEvent(new CustomEvent('privacy:open-settings'));
+  }
+
   trackByRoomId(index: number, room: Room): string {
     return room.room_id;
   }

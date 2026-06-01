@@ -160,6 +160,10 @@ export class FeedbackPage {
     this.navCtrl.navigateRoot(['/']);
   }
 
+  openPrivacySettings(): void {
+    window.dispatchEvent(new CustomEvent('privacy:open-settings'));
+  }
+
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message,

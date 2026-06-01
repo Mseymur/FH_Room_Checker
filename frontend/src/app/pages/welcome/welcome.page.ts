@@ -73,4 +73,8 @@ export class WelcomePage {
   goToFeedback() {
     this.navCtrl.navigateForward('/feedback');
   }
+
+  openPrivacySettings(): void {
+    window.dispatchEvent(new CustomEvent('privacy:open-settings'));
+  }
 }
