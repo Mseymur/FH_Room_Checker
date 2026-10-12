@@ -26,7 +26,7 @@ PATTERNS = {
     "private machine path": re.compile(r"(?:/Users/|/home/)[A-Za-z0-9_.-]+/|[A-Z]:\\Users\\"),
     "private network address": re.compile(r"\b(?:192\.168|10\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}\b"),
     "analytics identifier": re.compile(r"\b(?:G-[A-Z0-9]{8,12}|UA-\d{4,10}-\d{1,4}|GTM-[A-Z0-9]{6,8})\b"),
-    "deployment identifier": re.compile(r"[a-z]{20}\.supabase\.co|project_ref=[a-z0-9]{12,}|https://[a-z0-9-]+\.vercel\.app"),
+    "deployment identifier": re.compile(r"[a-z]{20}\.supabase\.co|project_ref=[a-z0-9]{12,}|https://(?!fh-room-checker\.vercel\.app)[a-z0-9-]+\.vercel\.app"),  # the public demo URL is intentional
     "contact address": re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
 }
 
