@@ -1,0 +1,167 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Campus brand colour + room-status tokens (see DESIGN.md) */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-free: var(--free);
+  --color-free-foreground: var(--free-foreground);
+  --color-soon: var(--soon);
+  --color-soon-foreground: var(--soon-foreground);
+  --color-busy: var(--busy);
+  --color-busy-foreground: var(--busy-foreground);
+  /* Light-tinted status pills */
+  --color-free-tint: var(--free-tint);
+  --color-free-tint-foreground: var(--free-tint-foreground);
+  --color-soon-tint: var(--soon-tint);
+  --color-soon-tint-foreground: var(--soon-tint-foreground);
+  --color-busy-tint: var(--busy-tint);
+  --color-busy-tint-foreground: var(--busy-tint-foreground);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Neutral palette */
+  --background: oklch(0.975 0.005 258.3); /* #F5F7FA canvas */
+  --foreground: oklch(0.262 0.009 248.2); /* #212529 ink */
+  --card: oklch(1 0 0); /* white */
+  --card-foreground: oklch(0.262 0.009 248.2);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.262 0.009 248.2);
+
+  /* Brand colour */
+  --primary: oklch(0.551 0.224 26.2);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.942 0.005 247.9); /* #E9ECEF */
+  --secondary-foreground: oklch(0.262 0.009 248.2);
+  --muted: oklch(0.982 0.002 247.8); /* #F8F9FA */
+  --muted-foreground: oklch(0.558 0.016 244.9); /* #6C757D */
+  --accent: oklch(0.946 0.024 8.2); /* soft red tint */
+  --accent-foreground: oklch(0.477 0.194 25.8); /* #B00017 */
+  --destructive: oklch(0.592 0.202 21.2); /* #DC3545 */
+  --border: oklch(0.942 0.005 247.9); /* #E9ECEF */
+  --input: oklch(0.867 0.011 247.9); /* #CED4DA */
+  --ring: oklch(0.551 0.224 26.2);
+
+
+  /* Brand gradient stops — the header uses the utility below */
+  --brand: oklch(0.551 0.224 26.2);
+  --brand-foreground: oklch(1 0 0);
+  --brand-from: oklch(0.551 0.224 26.2);
+  --brand-to: oklch(0.477 0.194 25.8); /* #B00017 */
+
+  /* Room status — FREE green / SOON amber / BUSY danger-red */
+  --free: oklch(0.64 0.175 146.7); /* #28A745 */
+  --free-foreground: oklch(1 0 0);
+  --soon: oklch(0.844 0.172 84.9); /* #FFC107 */
+  --soon-foreground: oklch(0.523 0.106 85.5); /* #856404 */
+  --busy: oklch(0.592 0.202 21.2); /* #DC3545 */
+  --busy-foreground: oklch(1 0 0);
+
+  /* Tinted pills (light) */
+  --free-tint: oklch(0.923 0.037 152.8); /* #d4edda */
+  --free-tint-foreground: oklch(0.403 0.105 147.3); /* #155724 (darkened from #28A745 for AA) */
+  --soon-tint: oklch(0.964 0.051 92.6); /* #fff3cd */
+  --soon-tint-foreground: oklch(0.523 0.106 85.5); /* #856404 */
+  --busy-tint: oklch(0.907 0.037 11.6); /* #f8d7da */
+  --busy-tint-foreground: oklch(0.371 0.119 20.2); /* #721c24 */
+
+}
+
+.dark {
+  --background: oklch(0.17 0 0);
+  --foreground: oklch(0.982 0.002 247.8);
+  --card: oklch(0.215 0 0);
+  --card-foreground: oklch(0.982 0.002 247.8);
+  --popover: oklch(0.215 0 0);
+  --popover-foreground: oklch(0.982 0.002 247.8);
+
+  --primary: oklch(0.62 0.21 26); /* brightened brand colour */
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.27 0 0);
+  --secondary-foreground: oklch(0.982 0.002 247.8);
+  --muted: oklch(0.27 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(0.32 0.09 22); /* dark red tint */
+  --accent-foreground: oklch(0.8 0.16 25);
+  --destructive: oklch(0.65 0.2 23);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 20%);
+  --ring: oklch(0.62 0.21 26);
+
+
+  --brand: oklch(0.62 0.21 26);
+  --brand-foreground: oklch(1 0 0);
+  --brand-from: oklch(0.551 0.224 26.2); /* keep the brand gradient in dark too */
+  --brand-to: oklch(0.46 0.19 26);
+
+  --free: oklch(0.72 0.17 147);
+  --free-foreground: oklch(0.18 0.04 150);
+  --soon: oklch(0.85 0.16 85);
+  --soon-foreground: oklch(0.3 0.05 85);
+  --busy: oklch(0.65 0.2 23);
+  --busy-foreground: oklch(1 0 0);
+
+  /* Tinted pills (dark): translucent fill + bright text */
+  --free-tint: oklch(0.72 0.17 147 / 18%);
+  --free-tint-foreground: oklch(0.82 0.16 150);
+  --soon-tint: oklch(0.85 0.16 85 / 18%);
+  --soon-tint-foreground: oklch(0.88 0.15 88);
+  --busy-tint: oklch(0.65 0.2 23 / 22%);
+  --busy-tint-foreground: oklch(0.82 0.16 23);
+
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Brand gradient (header). Registered as a utility so dark: variants (e.g. dark:bg-none)
+   can override it — a plain unlayered rule would always win over layered utilities. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+}

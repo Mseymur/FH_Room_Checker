@@ -1,0 +1,47 @@
+# Local secrets and private data
+**/.env
+**/.env.*
+!**/.env.example
+**/.local/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.sql
+*.dump
+*.bak
+
+# Private-origin notes and dead files kept locally, never published
+docs/RELEASE_AUDIT.md
+frontend/components/theme-provider.tsx
+frontend/lib/site.ts
+
+# Local tools and deployment bindings
+.agents/
+.codex/
+.claude/
+.aws/
+.mcp.json
+skills-lock.json
+**/.vercel/
+**/.design-sync/
+.playwright-mcp/
+
+# Dependencies, generated artifacts and releases
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/dist/
+**/coverage/
+**/screenshots/
+**/playwright-report/
+**/test-results/
+.release/
+**/*.tsbuildinfo
+**/__pycache__/
+**/*.pyc
+**/next-env.d.ts
+**/.DS_Store
+*.log
