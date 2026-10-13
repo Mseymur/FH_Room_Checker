@@ -35,7 +35,7 @@
     "eslint": "^9",
     "playwright": "^1.61.0",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "^7",
     "vitest": "5.0.4",
     "@eslint/js": "9.39.4",
     "typescript-eslint": "8.61.1",
